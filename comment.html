@@ -386,194 +386,134 @@ HTTP/1.1 200 OK[]
  {
    "count": 45
  }</pre>
+               <h3>Example: Counting all the comments for a specific blog</h3>
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET admin/comments/count.json?blog_id=241253187</pre>
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+ {
+   "count": 18
+ }</pre>
+               <h3>Example: Counting all the comments for a specific article</h3>
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET admin/comments/count.json?article_id=241253187</pre>
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+ {
+   "count": 2
+ }</pre>
             </div>
           </div>
         </div>
         <div class="accordion-group">
           <div class="accordion-heading">
             <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFour'>
-              <tt>POST /blogs/:blog_id/articles.json</tt>
+              <tt>POST admin/comments.json</tt>
             </a>
           </div>
           <div id="collapseFour" class="accordion-body collapse">
             <div class="accordion-inner">
-              <h3>Example: Creating a new blog</h3>
+              <h3>Example: Creating a new comment</h3>
               <h4>Request:</h4>
-              <pre class="prettyprint linenums">POST admin/blogs.json</pre>
+              <pre class="prettyprint linenums">POST admin/comments.json</pre>
               <h4>Request Body:</h4>
               <pre class="prettyprint linenums">
 {
-   "blog": {
-     "title": "Apple main blog"
+   "comment": {
+     "body": "Here's a comment made using Textile markup, with *bold* and _italic_ text.",
+     "author": "Kara Thrace",
+     "email": "kara@example.com",
+     "article_id": 5902995
    }
  }</pre>
               <h4>Response:</h4>
               <pre class="prettyprint linenums">
 HTTP/1.1 201 Created[]
- {
-   "blog": {
-     "commentable": "no",
-     "created_at": "2012-03-13T16:10:05-04:00",
-     "feedburner": null,
-     "feedburner_location": null,
-     "handle": "apple-main-blog",
-     "id": 1008414330,
-     "template_suffix": null,
-     "title": "Apple main blog",
-     "updated_at": "2012-03-13T16:10:05-04:00"
-   }
+   {
+     "comment": {
+         "article_id": 5902995,
+         "author": "Kara Thrace",
+         "blog_id": 1818775,
+         "body": "Here's a comment made using Textile markup, with *bold* and _italic_ text.",
+         "body_html": "\u003Cp\u003EHere\u0026#8217;s a comment made using Textile markup, with \u003Cstrong\u003Ebold\u003C/strong\u003E and \u003Cem\u003Eitalic\u003C/em\u003E text.\u003C/p\u003E",
+         "created_at": "2012-03-31T22:32:04-04:00",
+         "email": "kara@example.com",
+         "id": 27153791,
+         "ip": null,
+         "published_at": "2012-03-31T22:32:04-04:00",
+         "status": "pending",
+         "updated_at": "2012-03-31T22:32:04-04:00",
+         "user_agent": null
+     }
  }</pre>
-              <h3>Example: Creating a new blog with a metafield</h3>
+              <h3>Example: Attempting to create a new comment without a body, author or email</h3>
               <h4>Request:</h4>
-              <pre class="prettyprint linenums">POST admin/blogs.json</pre>
+              <pre class="prettyprint linenums">POST admin/comments.json</pre>
               <h4>Request Body:</h4>
               <pre class="prettyprint linenums">
 {
-   "blog": {
-     "title": "Apple main blog",
-     "metafields": [
-       {
-         "key": "new",
-         "value": "newvalue",
-         "value_type": "string",
-         "namespace": "global"
-       }
-     ]
+   "comment": {
+     "article_id": 5902995
    }
- }</pre>
-              <h4>Response:</h4>
-              <pre class="prettyprint linenums">
-HTTP/1.1 201 Created[]
- {
-   "blog": {
-     "commentable": "no",
-     "created_at": "2012-03-13T16:10:05-04:00",
-     "feedburner": null,
-     "feedburner_location": null,
-     "handle": "apple-main-blog",
-     "id": 1008414331,
-     "template_suffix": null,
-     "title": "Apple main blog",
-     "updated_at": "2012-03-13T16:10:05-04:00"
-   }
- }</pre>
-              <h3>Example: Attempting to create a new blog without a title</h3>
-              <h4>Request:</h4>
-              <pre class="prettyprint linenums">POST admin/blogs.json</pre>
-              <h4>Request Body:</h4>
-              <pre class="prettyprint linenums">
-{
-   "blog": {}
  }</pre>
               <h4>Response:</h4>
               <pre class="prettyprint linenums">
 HTTP/1.1 422 Unprocessable Entity[]
  {
    "errors": {
-     "title": [
+     "author": [
        "can't be blank"
+     ],
+     "body": [
+       "can't be blank"
+     ],
+     "email": [
+       "is invalid"
      ]
    }
- }
-</pre>
+ }</pre>
             </div>
           </div>
         </div>
         <div class="accordion-group">
           <div class="accordion-heading">
             <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFive'>
-              <tt>PUT /blogs/:blog_id.json</tt>
+              <tt>PUT /comments/:comment_id.json</tt>
             </a>
           </div>
           <div id="collapseFive" class="accordion-body collapse">
             <div class="accordion-inner">
-              <h3>Example: Change the title of a blog</h3>
+              <h3>Example: Changing the content of a comment</h3>
               <h4>Request:</h4>
-              <pre class="prettyprint linenums">PUT admin/blogs/1818775.json</pre>
+              <pre class="prettyprint linenums">PUT admin/comments/27153791.json</pre>
               <h4>Request Body:</h4>
               <pre class="prettyprint linenums">
 {
-   "blog": {
-     "title": "IPod Updates"
+   "comment": {
+     "body": "This is the updated comment."
    }
  }</pre>
               <h4>Response:</h4>
               <pre class="prettyprint linenums">
 HTTP/1.1 200 OK[]
    {
-     "blog": {
-         "commentable": "yes",
-         "created_at": "2012-03-31T14:11:32-04:00",
-         "feedburner": null,
-         "feedburner_location": null,
-         "handle": "el-bloggo",
-         "id": 1818775,
-         "template_suffix": null,
-         "title": "IPod Updates",
-         "updated_at": "2012-03-31T18:00:42-04:00"
+     "comment": {
+         "article_id": 5902995,
+         "author": "Kara Thrace",
+         "blog_id": 1818775,
+         "body": "This is the updated comment.",
+         "body_html": "\u003Cp\u003EThis is the updated comment.\u003C/p\u003E",
+         "created_at": "2012-03-31T22:32:04-04:00",
+         "email": "kara@example.com",
+         "id": 27153791,
+         "ip": null,
+         "published_at": "2012-03-31T22:32:04-04:00",
+         "status": "published",
+         "updated_at": "2012-03-31T23:08:29-04:00",
+         "user_agent": null
      }
- }</pre>
-              <h3>Example: Change the title and handle of a blog and disable comments</h3>
-              <h4>Request:</h4>
-              <pre class="prettyprint linenums">PUT admin/blogs/1818775.json</pre>
-              <h4>Request Body:</h4>
-              <pre class="prettyprint linenums">
-{
-   "blog": {
-     "commentable": "no",
-     "handle": "blog-day-afternoon",
-     "title": "Blog Day Afternoon"
-   }
- }</pre>
-              <h4>Response:</h4>
-              <pre class="prettyprint linenums">
-HTTP/1.1 200 OK[]
-   {
-     "blog": {
-         "commentable": "no",
-         "created_at": "2012-03-31T14:11:32-04:00",
-         "feedburner": null,
-         "feedburner_location": null,
-         "handle": "blog-day-afternoon",
-         "id": 1818775,
-         "template_suffix": null,
-         "title": "Blog Day Afternoon",
-         "updated_at": "2012-03-31T18:24:40-04:00"
-     }
- }</pre>
-              <h3>Example: Add a metafield to a blog</h3>
-              <h4>Request:</h4>
-              <pre class="prettyprint linenums">PUT admin/blogs/241253187.json</pre>
-              <h4>Request Body:</h4>
-              <pre class="prettyprint linenums">
-{
-   "blog": {
-     "metafields": [
-       {
-         "key": "new",
-         "value": "newvalue",
-         "value_type": "string",
-         "namespace": "global"
-       }
-     ]
-   }
- }
-</pre>
-              <h4>Response:</h4>
-              <pre class="prettyprint linenums">
-HTTP/1.1 200 OK[]
- {
-   "blog": {
-     "commentable": "no",
-     "created_at": "2012-03-13T16:09:54-04:00",
-     "feedburner": null,
-     "feedburner_location": null,
-     "handle": "apple-blog",
-     "id": 241253187,
-     "template_suffix": null,
-     "title": "Mah Blog",
-     "updated_at": "2006-02-01T19:00:00-05:00"
-   }
  }</pre>
             </div>
           </div>
@@ -581,18 +521,136 @@ HTTP/1.1 200 OK[]
         <div class="accordion-group">
           <div class="accordion-heading">
             <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseSix'>
-              <tt>DELETE /blogs/:blog_id.json</tt>
+              <tt>POST admin/comments/comment_id/spam.json</tt>
             </a>
           </div>
           <div id="collapseSix" class="accordion-body collapse">
             <div class="accordion-inner">
-              <h3>Example: Deleting a blog</h3>
+              <h3>Example: Marking a comment as spam</h3>
               <h4>Request:</h4>
-              <pre class="prettyprint linenums">DELETE admin/blogs/241253187.json</pre>
+              <pre class="prettyprint linenums">POST admin/comments/653537639/spam.json</pre>
               <h4>Response:</h4>
               <pre class="prettyprint linenums">
 HTTP/1.1 200 OK[]
- {}</pre>
+ {
+   "comment": {
+     "article_id": 134645308,
+     "author": "Soleone",
+     "blog_id": 241253187,
+     "body": "Hi author, I really _like_ what you're doing there.",
+     "body_html": "<p>Hi author, I really <em>like</em> what you're doing there.</p>",
+     "created_at": "2012-03-13T16:09:54-04:00",
+     "email": "sole@one.de",
+     "id": 653537639,
+     "ip": "127.0.0.1",
+     "published_at": "2012-03-13T16:10:12-04:00",
+     "status": "spam",
+     "updated_at": "2012-03-13T16:10:12-04:00",
+     "user_agent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_4; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.2 Safari/525.20.1"
+   }
+ }</pre>
+            </div>
+          </div>
+        </div>
+                <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseSeven'>
+              <tt>POST admin/comments/comment_id/not_spam.json</tt>
+            </a>
+          </div>
+          <div id="collapseSeven" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Deleting a blog</h3>
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST admin/comments/653537639/not_spam.json</pre>
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+ {
+   "comment": {
+     "article_id": 134645308,
+     "author": "Soleone",
+     "blog_id": 241253187,
+     "body": "Hi author, I really _like_ what you're doing there.",
+     "body_html": "<p>Hi author, I really <em>like</em> what you're doing there.</p>",
+     "created_at": "2012-03-13T16:09:54-04:00",
+     "email": "sole@one.de",
+     "id": 653537639,
+     "ip": "127.0.0.1",
+     "published_at": "2012-03-13T16:10:12-04:00",
+     "status": "published",
+     "updated_at": "2012-03-13T16:10:12-04:00",
+     "user_agent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_4; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.2 Safari/525.20.1"
+   }
+ }</pre>
+            </div>
+          </div>
+        </div>
+                <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseEight'>
+              <tt>POST admin/comments/comment_id/approve.json</tt>
+            </a>
+          </div>
+          <div id="collapseEight" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Approving a comment</h3>
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST admin/comments/653537639/approve.json</pre>
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+ {
+   "comment": {
+     "article_id": 134645308,
+     "author": "Soleone",
+     "blog_id": 241253187,
+     "body": "Hi author, I really _like_ what you're doing there.",
+     "body_html": "<p>Hi author, I really <em>like</em> what you're doing there.</p>",
+     "created_at": "2012-03-13T16:09:54-04:00",
+     "email": "sole@one.de",
+     "id": 653537639,
+     "ip": "127.0.0.1",
+     "published_at": "2012-03-13T16:10:11-04:00",
+     "status": "published",
+     "updated_at": "2012-03-13T16:10:11-04:00",
+     "user_agent": "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_4; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.2 Safari/525.20.1"
+   }
+ }</pre>
+            </div>
+          </div>
+        </div>
+                <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseNine'>
+              <tt>POST /admin/comments/comment_id/remove.format</tt>
+            </a>
+          </div>
+          <div id="collapseNine" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Removing a comment</h3>
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST admin/comments/27153791/remove.json</pre>
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+   {
+     "comment": {
+         "article_id": 5902995,
+         "author": "Kara Thrace",
+         "blog_id": 1818775,
+         "body": "This is the updated comment.",
+         "body_html": "<p>This is the updated comment.</p>",
+         "created_at": "2012-03-31T22:32:04-04:00",
+         "email": "kara@example.com",
+         "id": 27153791,
+         "ip": null,
+         "published_at": "2012-03-31T22:32:04-04:00",
+         "status": "removed",
+         "updated_at": "2012-03-31T23:15:39-04:00",
+         "user_agent": null
+     }
+ }</pre>
             </div>
           </div>
         </div>
