@@ -1,0 +1,1617 @@
+---
+layout: resource
+title: Product
+intro: A <strong>product</strong> is an individual item for sale in a Shopify shop. Products are often physical, but don't have to be; a digital download (such as a movie, music or ebook file) also qualifies as a product, as do services (such as equipment rental, work for hire, customization of another product or an extended warranty). Simply put: if it's something for sale in a shop, it's a Product.
+---
+<div class='row-fluid'>
+  <div class='span12'>
+    <h2>What can you do with products using the Shopify API?</h2>
+
+    <p>The Shopify API lets you do the following with ***:</p>
+    <ul>
+      <li><strong>Get information</strong> about one or more products</li>
+      <li><strong>Count</strong> all or specific products</li>
+      <li><strong>Create</strong> a new product</li>
+      <li><strong>Modify</strong> a product</li>
+      <li><strong>Delete</strong> a product</li>
+    </ul>
+    <p>Just about anything that can be done with an product through the shop's admin page can also be done through the API.</p>
+    
+    <h2>Product properties</h2>
+    <table class='table table-striped table-bordered'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><tt>body_html</tt></strong></td>
+          <td>The description of the product, complete with HTML formatting.</td>
+        </tr>
+        <tr>
+        <tr>
+          <td><strong><tt>created_at</tt></strong></td>
+          <td>The date and time when the product was created. The API returns this value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format.</a></td>
+        </tr>
+        <tr>
+          <td><strong><tt>handle</tt></strong></td>
+          <td>A human-friendly unique string for the Product automatically generated from its <tt>title</tt>. They are used by the Liquid templating language to refer to objects.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>id</tt></strong></td>
+          <td>The unique numeric identifier for the product. Product <tt>id</tt>s are unique across the entire Shopify system; no two products will have the same id, even if they're from different shops.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>images</tt></strong></td>
+          <td>A list of image objects, each one representing an image associated with the product.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>options</tt></strong></td>
+          <td>Custom product property names like “Size”, “Color”, and “Material”. Product variants are based on permutations of these options. A product may have a maximum of 3 options.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>product_type</tt></strong></td>
+          <td>A categorization that a product can be tagged with, commonly used for filtering and searching.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>published_at</tt></strong></td>
+          <td>The date and time when the product was published. The API returns this value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>tags</tt></strong></td>
+          <td>A categorization that a product can be tagged with, commonly used for filtering and searching.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>template_suffix</tt></strong></td>
+          <td>Specifies a special template to be applied only to this product.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>title</tt></strong></td>
+          <td>The name of the product. In a shop's catalog, clicking on a product's <tt>title</tt> takes you to that product's page. On a product's page, the product's <tt>title</tt> typically appears in a large font.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>updated_at</tt></strong></td>
+          <td>The date and time when the product was last modified. The API returns this value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format.</a></td>
+        </tr>
+        <tr>
+          <td><strong><tt>user_id</tt></strong></td>
+          <td>A unique numeric identifier for the author of the product.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>variants</tt></strong></td>
+          <td>A list of variant objects, each one representing a slightly different version of the product. For example, if a product comes in different sizes and colors, each size and color permutation (such as "small black", "medium black", "large blue"), would be a variant.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>vendor</tt></strong></td>
+          <td>The name of the vendor of the product.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Endpoints</h2>
+    <script type="text/javascript">$(".collapse").collapse()</script>
+    <div class="accordion" id="accordion1">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseOne'>
+              <tt>GET /admin/products.json</tt>
+          </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <h3>Query parameters</h3>
+            <p>By default, requesting a list of products returns all the products for that shop. You can use the optional query parameters listed below to filter the returned list by specific criteria.</p>
+
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><tt>collection_id</tt></strong></td>
+                  <td>The <tt>id</tt> of a collection of products that you want to retrieve. Use this parameter to retrieve only products that belong to a specific collection.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>created_at_max</tt></strong></td>
+                  <td>The upper bound on the date and time of creation (its <tt>created_at</tt> value) for the products you want to retrieve. Use this parameter to retrieve only products that were created before a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>created_at_min</tt></strong></td>
+                  <td>The lower bound on the date and time of creation (its <tt>created_at</tt> value) for the products you want to retrieve. Use this parameter to retrieve only products that were created after a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>fields</tt></strong></td>
+                  <td>A comma-separated list of the properties you want returned for each product in the result list. By default, the returned list of products is a list of products with all the properties included. Use this parameter to restrict the returned list of products to showing only those properties you specify, with each property separated by a comma.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>handle</tt></strong></td>
+                  <td>A unique string for the Product automatically generated from its <tt>title</tt> used by the Liquid templating language to refer to objects. Use this parameter to retrieve only the product with a specific handle.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>limit</tt></strong></td>
+                  <td>The maximum number of products that should be returned. By default, the maximum number of products returned is 50. Use this parameter to change the maximum number of returned products from 1 to 250. Setting this parameter outside the 1 - 250 range will result in an error.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>page</tt></strong></td>
+                  <td>The page of the result list to retrieve. Use this in tandem with <tt>limit</tt> to page through the products in a shop.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>product_type</tt></strong></td>
+                  <td>The type of the products to retrieve. Use this parameter to retrieve only products of a specific product type.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>published_at_max</tt></strong></td>
+                  <td>The upper bound on the date and time of when a product was published (its <tt>published_at</tt> value) for the products you want to retrieve. Use this parameter to retrieve only products that were published before a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>published_at_min</tt></strong></td>
+                  <td>The lower bound on the date and time of when a product was published (its <tt>published_at</tt> value) for the products you want to retrieve. Use this parameter to retrieve only products that were published after a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>published_status</tt></strong></td>
+                  <td>The status – published, unpublished or both – of the products you want to retrieve. Valid values are:
+                    <ul>
+                      <li><strong><tt>any</tt> (default):</strong> Use this value to retrieve both published and draft products.</li>
+                      <li><strong><tt>published</tt>:</strong> Use this value to retrieve only products that are published.</li>
+                      <li><strong><tt>unpublished</tt>:</strong> Use this value to retrieve only products that saved as drafts.</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong><tt>since_id</tt></strong></td>
+                  <td>The lower bound on a product’s <tt>id</tt>. Use this parameter to restrict the returned list to only products whose <tt>id</tt> is greater than the specified id.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>updated_at_max</tt></strong></td>
+                  <td>The upper bound on the date and time of a product’s last update (its <tt>updated_at</tt> value) for the products you want to retrieve. Use this parameter to retrieve only products that were updated before a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>updated_at_min</tt></strong></td>
+                  <td>The lower bound on the date and time of a product's last update (its <tt>updated_at</tt> value) for the products you want to retrieve. Use this parameter to retrieve only products that were updated before a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>vendor</tt></strong></td>
+                  <td>The vendor of the products to retrieve. Use this parameter to retrieve only the products of a specific vendor.</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <h3>Example: Get a list of the shop's products</h3>
+            <p>In this example, we want to retrieve a list of the products in the shop.</p>
+            
+            <h4>Request:</h4>
+            <pre class="prettyprint linenums">GET /admin/products.json</pre>
+            
+            <h4>Response:</h4>
+            <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "products": [
+    {
+      "body_html": "<p>It's the small iPod with one very big idea: Video. Now the world's most popular music player, available in 4GB and 8GB models, lets you enjoy TV shows, movies, video podcasts, and more. The larger, brighter display means amazing picture quality. In six eye-catching colors, iPod nano is stunning all around. And with models starting at just $149, little speaks volumes.</p>",
+      "created_at": "2012-02-15T15:12:21-05:00",
+      "handle": "ipod-nano",
+      "id": 632910392,
+      "product_type": "Cult Products",
+      "published_at": "2007-12-31T19:00:00-05:00",
+      "template_suffix": null,
+      "title": "IPod Nano - 8GB",
+      "updated_at": "2012-02-15T15:12:21-05:00",
+      "vendor": "Apple",
+      "tags": "Emotive, Flash Memory, MP3, Music",
+      "variants": [
+        {
+          "compare_at_price": null,
+          "created_at": "2012-02-15T15:12:21-05:00",
+          "fulfillment_service": "manual",
+          "grams": 200,
+          "id": 808950810,
+          "inventory_management": "shopify",
+          "inventory_policy": "continue",
+          "option1": "Pink",
+          "option2": null,
+          "option3": null,
+          "position": 1,
+          "price": "199.00",
+          "requires_shipping": true,
+          "sku": "IPOD2008PINK",
+          "taxable": true,
+          "title": "Pink",
+          "updated_at": "2012-02-15T15:12:21-05:00",
+          "inventory_quantity": 10
+        },
+        {
+          "compare_at_price": null,
+          "created_at": "2012-02-15T15:12:21-05:00",
+          "fulfillment_service": "manual",
+          "grams": 200,
+          "id": 49148385,
+          "inventory_management": "shopify",
+          "inventory_policy": "continue",
+          "option1": "Red",
+          "option2": null,
+          "option3": null,
+          "position": 2,
+          "price": "199.00",
+          "requires_shipping": true,
+          "sku": "IPOD2008RED",
+          "taxable": true,
+          "title": "Red",
+          "updated_at": "2012-02-15T15:12:21-05:00",
+          "inventory_quantity": 20
+        },
+        {
+          "compare_at_price": null,
+          "created_at": "2012-02-15T15:12:21-05:00",
+          "fulfillment_service": "manual",
+          "grams": 200,
+          "id": 39072856,
+          "inventory_management": "shopify",
+          "inventory_policy": "continue",
+          "option1": "Green",
+          "option2": null,
+          "option3": null,
+          "position": 3,
+          "price": "199.00",
+          "requires_shipping": true,
+          "sku": "IPOD2008GREEN",
+          "taxable": true,
+          "title": "Green",
+          "updated_at": "2012-02-15T15:12:21-05:00",
+          "inventory_quantity": 30
+        },
+        {
+          "compare_at_price": null,
+          "created_at": "2012-02-15T15:12:21-05:00",
+          "fulfillment_service": "manual",
+          "grams": 200,
+          "id": 457924702,
+          "inventory_management": "shopify",
+          "inventory_policy": "continue",
+          "option1": "Black",
+          "option2": null,
+          "option3": null,
+          "position": 4,
+          "price": "199.00",
+          "requires_shipping": true,
+          "sku": "IPOD2008BLACK",
+          "taxable": true,
+          "title": "Black",
+          "updated_at": "2012-02-15T15:12:21-05:00",
+          "inventory_quantity": 40
+        }
+     ],
+     "images": [
+      {
+        "created_at": "2012-02-15T15:12:21-05:00",
+        "id": 850703190,
+        "position": 1,
+        "product_id": 632910392,
+        "updated_at": "2012-02-15T15:12:21-05:00",
+        "src": "http://static.shopify.com/s/files/1/6909/3384/products/ipod-nano.png?0"
+      }
+     ],
+     "options": [
+      {
+        "name": "Title"
+      }
+     ]
+   },
+   {
+     "body_html": "<p>The iPod Touch has the iPhone's multi-touch interface, with a physical home button off the touch screen. The home screen has a list of buttons for the available applications.</p>",
+     "created_at": "2012-02-15T15:12:21-05:00",
+     "handle": "ipod-touch",
+     "id": 921728736,
+     "product_type": "Cult Products",
+     "published_at": "2008-09-25T20:00:00-04:00",
+     "template_suffix": null,
+     "title": "IPod Touch 8GB",
+     "updated_at": "2012-02-15T15:12:21-05:00",
+     "vendor": "Apple",
+     "tags": "",
+     "variants": [
+
+     ],
+     "images": [
+
+     ],
+     "options": [
+       {
+         "name": "Title"
+       }
+     ]
+   }
+  ]
+}
+            </pre>
+            
+            <h3>Example: Get a list of products that belong to a specific collection</h3>
+            <p>In this example, we want to retrieve a list of only those products belonging to the collection whose <tt>id</tt> is <tt>841564295</tt>.</p>
+
+            <h4>Request:</h4>
+            <pre class="prettyprint linenums">GET /admin/products.json?collection_id=841564295</pre>
+
+            <h4>Response:</h4>
+            <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "products": [
+    {
+     "body_html": "<p>It's the small iPod with one very big idea: Video. Now the world's most popular music player, available in 4GB and 8GB models, lets you enjoy TV shows, movies, video podcasts, and more. The larger, brighter display means amazing picture quality. In six eye-catching colors, iPod nano is stunning all around. And with models starting at just $149, little speaks volumes.</p>",
+     "created_at": "2012-02-15T15:12:21-05:00",
+     "handle": "ipod-nano",
+     "id": 632910392,
+     "product_type": "Cult Products",
+     "published_at": "2007-12-31T19:00:00-05:00",
+     "template_suffix": null,
+     "title": "IPod Nano - 8GB",
+     "updated_at": "2012-02-15T15:12:21-05:00",
+     "vendor": "Apple",
+     "tags": "Emotive, Flash Memory, MP3, Music",
+     "variants": [
+       {
+         "compare_at_price": null,
+         "created_at": "2012-02-15T15:12:21-05:00",
+         "fulfillment_service": "manual",
+         "grams": 200,
+         "id": 808950810,
+         "inventory_management": "shopify",
+         "inventory_policy": "continue",
+         "option1": "Pink",
+         "option2": null,
+         "option3": null,
+         "position": 1,
+         "price": "199.00",
+         "requires_shipping": true,
+         "sku": "IPOD2008PINK",
+         "taxable": true,
+         "title": "Pink",
+         "updated_at": "2012-02-15T15:12:21-05:00",
+         "inventory_quantity": 10
+       },
+       {
+         "compare_at_price": null,
+         "created_at": "2012-02-15T15:12:21-05:00",
+         "fulfillment_service": "manual",
+         "grams": 200,
+         "id": 49148385,
+         "inventory_management": "shopify",
+         "inventory_policy": "continue",
+         "option1": "Red",
+         "option2": null,
+         "option3": null,
+         "position": 2,
+         "price": "199.00",
+         "requires_shipping": true,
+         "sku": "IPOD2008RED",
+         "taxable": true,
+         "title": "Red",
+         "updated_at": "2012-02-15T15:12:21-05:00",
+         "inventory_quantity": 20
+       },
+       {
+         "compare_at_price": null,
+         "created_at": "2012-02-15T15:12:21-05:00",
+         "fulfillment_service": "manual",
+         "grams": 200,
+         "id": 39072856,
+         "inventory_management": "shopify",
+         "inventory_policy": "continue",
+         "option1": "Green",
+         "option2": null,
+         "option3": null,
+         "position": 3,
+         "price": "199.00",
+         "requires_shipping": true,
+         "sku": "IPOD2008GREEN",
+         "taxable": true,
+         "title": "Green",
+         "updated_at": "2012-02-15T15:12:21-05:00",
+         "inventory_quantity": 30
+       },
+       {
+         "compare_at_price": null,
+         "created_at": "2012-02-15T15:12:21-05:00",
+         "fulfillment_service": "manual",
+         "grams": 200,
+         "id": 457924702,
+         "inventory_management": "shopify",
+         "inventory_policy": "continue",
+         "option1": "Black",
+         "option2": null,
+         "option3": null,
+         "position": 4,
+         "price": "199.00",
+         "requires_shipping": true,
+         "sku": "IPOD2008BLACK",
+         "taxable": true,
+         "title": "Black",
+         "updated_at": "2012-02-15T15:12:21-05:00",
+         "inventory_quantity": 40
+       }
+     ],
+     "images": [
+       {
+         "created_at": "2012-02-15T15:12:21-05:00",
+         "id": 850703190,
+         "position": 1,
+         "product_id": 632910392,
+         "updated_at": "2012-02-15T15:12:21-05:00",
+         "src": "http://static.shopify.com/s/files/1/6909/3384/products/ipod-nano.png?0"
+       }
+     ],
+     "options": [
+       {
+         "name": "Title"
+       }
+     ]
+    }
+  ]
+}
+            </pre>
+
+            <h3>Example: Get a list of products, limiting the number of properties returned</h3>
+            <p>By default, the resulting list of products includes every property for each product in that list. This can be a large amount of data and is often more information than required. The <tt>fields</tt> input parameter is useful for paring down the properties returned with each product.</p>
+
+            <p>In this example, we want to retrieve the list of products in the shop, but want only the <tt>id</tt> and <tt>title</tt> of each product.</p>
+
+            <h4>Request:</h4>
+            <pre class="prettyprint linenums">GET /admin/products.json?fields=id,title</pre>
+
+            <h4>Response:</h4>
+            <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+   "products": [{
+       "id": 70952132,
+       "title": "\"Barney Stinson\" Suit Pajamas"
+   }, {
+       "id": 71048192,
+       "title": "Belle Petite Flare Fit Jean"
+   }, {
+       "id": 71048502,
+       "title": "Big Can o' Veggie Hot Dogs"
+   }, {
+       "id": 70951662,
+       "title": "Bladefish 5000 Underwater Scooter"
+   }, {
+       "id": 70952492,
+       "title": "Cheeseburger in a Can"
+   }]
+}
+            </pre>
+
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseTwo'>
+              <tt>GET /admin/products/:product_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseTwo" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Get all properties of a single product</h3>
+              <p>In this example, we want to retrieve the product whose <tt>id</tt> is <tt>632910392</tt>.
+              </p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/products/632910392.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "product": {
+    "body_html": "<p>It's the small iPod with one very big idea: Video. Now the world's most popular music player, available in 4GB and 8GB models, lets you enjoy TV shows, movies, video podcasts, and more. The larger, brighter display means amazing picture quality. In six eye-catching colors, iPod nano is stunning all around. And with models starting at just $149, little speaks volumes.</p>",
+    "created_at": "2012-02-15T15:12:21-05:00",
+    "handle": "ipod-nano",
+    "id": 632910392,
+    "product_type": "Cult Products",
+    "published_at": "2007-12-31T19:00:00-05:00",
+    "template_suffix": null,
+    "title": "IPod Nano - 8GB",
+    "updated_at": "2012-02-15T15:12:21-05:00",
+    "vendor": "Apple",
+    "tags": "Emotive, Flash Memory, MP3, Music",
+    "variants": [
+     {
+       "compare_at_price": null,
+       "created_at": "2012-02-15T15:12:21-05:00",
+       "fulfillment_service": "manual",
+       "grams": 200,
+       "id": 808950810,
+       "inventory_management": "shopify",
+       "inventory_policy": "continue",
+       "option1": "Pink",
+       "option2": null,
+       "option3": null,
+       "position": 1,
+       "price": "199.00",
+       "requires_shipping": true,
+       "sku": "IPOD2008PINK",
+       "taxable": true,
+       "title": "Pink",
+       "updated_at": "2012-02-15T15:12:21-05:00",
+       "inventory_quantity": 10
+     },
+     {
+       "compare_at_price": null,
+       "created_at": "2012-02-15T15:12:21-05:00",
+       "fulfillment_service": "manual",
+       "grams": 200,
+       "id": 49148385,
+       "inventory_management": "shopify",
+       "inventory_policy": "continue",
+       "option1": "Red",
+       "option2": null,
+       "option3": null,
+       "position": 2,
+       "price": "199.00",
+       "requires_shipping": true,
+       "sku": "IPOD2008RED",
+       "taxable": true,
+       "title": "Red",
+       "updated_at": "2012-02-15T15:12:21-05:00",
+       "inventory_quantity": 20
+     },
+     {
+       "compare_at_price": null,
+       "created_at": "2012-02-15T15:12:21-05:00",
+       "fulfillment_service": "manual",
+       "grams": 200,
+       "id": 39072856,
+       "inventory_management": "shopify",
+       "inventory_policy": "continue",
+       "option1": "Green",
+       "option2": null,
+       "option3": null,
+       "position": 3,
+       "price": "199.00",
+       "requires_shipping": true,
+       "sku": "IPOD2008GREEN",
+       "taxable": true,
+       "title": "Green",
+       "updated_at": "2012-02-15T15:12:21-05:00",
+       "inventory_quantity": 30
+     },
+     {
+       "compare_at_price": null,
+       "created_at": "2012-02-15T15:12:21-05:00",
+       "fulfillment_service": "manual",
+       "grams": 200,
+       "id": 457924702,
+       "inventory_management": "shopify",
+       "inventory_policy": "continue",
+       "option1": "Black",
+       "option2": null,
+       "option3": null,
+       "position": 4,
+       "price": "199.00",
+       "requires_shipping": true,
+       "sku": "IPOD2008BLACK",
+       "taxable": true,
+       "title": "Black",
+       "updated_at": "2012-02-15T15:12:21-05:00",
+       "inventory_quantity": 40
+     }
+    ],
+    "images": [
+     {
+       "created_at": "2012-02-15T15:12:21-05:00",
+       "id": 850703190,
+       "position": 1,
+       "product_id": 632910392,
+       "updated_at": "2012-02-15T15:12:21-05:00",
+       "src": "http://static.shopify.com/s/files/1/6909/3384/products/ipod-nano.png?0"
+     }
+    ],
+    "options": [
+     {
+       "name": "Title"
+     }
+    ]
+  }
+}
+              </pre>
+
+              <h3>Example: Get a single product, limiting the number of properties returned</h3>
+              <p>In this example, we want to retrieve the product whose <tt>id</tt> is <tt>632910392</tt> and we want only its <tt>id</tt>, <tt>images</tt> and <tt>title</tt>.</p>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/products/632910392.json?fields=id,images,title</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "product": {
+    "id": 632910392,
+    "title": "IPod Nano - 8GB",
+    "images": [
+      {
+         "created_at": "2012-02-15T15:12:21-05:00",
+         "id": 850703190,
+         "position": 1,
+         "product_id": 632910392,
+         "updated_at": "2012-02-15T15:12:21-05:00",
+         "src": "http://static.shopify.com/s/files/1/6909/3384/products/ipod-nano.png?0"
+      }
+    ]
+  }
+}
+              </pre>
+
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseThree'>
+              <tt>GET /admin/products/count.json</tt>
+            </a>
+          </div>
+          <div id="collapseThree" class="accordion-body collapse">
+            <div class="accordion-inner">
+              
+              <h3>Query parameters</h3>
+               <table>
+                 <thead>
+                   <tr>
+                     <th>Name</th>
+                     <th>Description</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   <tr>
+                     <td><strong><tt>collection_id</tt></strong></td>
+                     <td>The <tt>id</tt> of a collection whose products you want to count. Use this parameter to count only products that belong to a specific collection.</td>
+                   </tr>
+                   <tr>
+                     <td><strong><tt>created_at_max</tt></strong></td>
+                     <td>The upper bound on the date and time of creation (its <tt>created_at</tt> value) for the products you want to count. Use this parameter to count only products that were created before a given date and time.</td>
+                   </tr>
+                   <tr>
+                     <td><strong><tt>created_at_min</tt></strong></td>
+                     <td>The lower bound on the date and time of creation (its <tt>created_at</tt> value) for the products you want to retrieve. Use this parameter to retrieve only products that were created after a given date and time.</td>
+                   </tr>
+                   <tr>
+                      <td><strong><tt>product_type</tt></strong></td>
+                      <td>The type of the products to count. Use this parameter to count only products of a specific product type.</td>
+                    </tr>
+                    <tr>
+                      <td><strong><tt>published_at_max</tt></strong></td>
+                      <td>The upper bound on the date and time of when a product was published (its <tt>published_at</tt> value) for the products you want to count. Use this parameter to count only products that were published before a given date and time.</td>
+                    </tr>
+                    <tr>
+                      <td><strong><tt>published_at_min</tt></strong></td>
+                      <td>The lower bound on the date and time of when a product was published (its <tt>published_at</tt> value) for the products you want to count. Use this parameter to count only products that were published after a given date and time.</td>
+                    </tr>
+                    <tr>
+                      <td><strong><tt>published_status</tt></strong></td>
+                      <td>
+                        <p>The status – published, unpublished or both – of the products you want to count. Valid values are:</p>
+                        <ul>
+                          <li><strong><tt>any</tt> (default):</strong> Use this value to count both published and unpublished products. This is the default value.</li>
+                          <li><strong><tt>published</tt>:</strong> Use this value to count only products that are published (created and visible to customers).</li>
+                          <li><strong><tt>unpublished</tt>:</strong> Use this value to count only products that are unpublished (created, but not yet visible to customers).</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong><tt>updated_at_max</tt></strong></td>
+                      <td>The upper bound on the date and time of a product’s last update (its <tt>updated_at</tt> value) for the products you want to count. Use this parameter to count only products that were updated before a given date and time.</td>
+                    </tr>
+                    <tr>
+                      <td><strong><tt>updated_at_min</tt></strong></td>
+                      <td>The lower bound on the date and time of a product's last update (its <tt>updated_at</tt> value) for the products you want to count. Use this parameter to count only products that were updated before a given date and time.</td>
+                    </tr>
+                    <tr>
+                      <td><strong><tt>vendor</tt></strong></td>
+                      <td>The vendor of the products to count. Use this parameter to count only the products of a specific vendor.</td>
+                    </tr>
+                 </tbody>
+               </table>
+              
+              <h3>Example: Count all the products in the shop</h3>
+              <p>In this example, we want to count all the products in the shop.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/products/count.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "count": 2
+}
+              </pre>
+              
+              <h3>Example: Count all the products in a specific collection</h3>
+              <p>In this example, we want to count the products in the collection whose <tt>id</tt> is <tt>841564295</tt>.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/products/count.json?collection_id=841564295</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "count": 1
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFour'>
+              <tt>POST /admin/products.json</tt>
+            </a>
+          </div>
+          <div id="collapseFour" class="accordion-body collapse">
+            <div class="accordion-inner">
+              
+              <h3>Example: Create a new product with the default variant</h3>
+              <p>In this example, we want to add a new product -- a snowboard -- to the shop. It will have these properties:</p>
+              <ul>
+                <li><strong><tt>title</tt>:</strong> Burton Custom Freestyle 151</li>
+                <li><strong><tt>body_html</tt>:</strong> Good snowboard! </em>(in bold text)</em></li>
+                <li><strong><tt>vendor</tt>:</strong> Burton</li>
+                <li><strong><tt>product_type</tt>:</strong> Snowboard</li>
+                <li><strong><tt>tags</tt>:</strong> Barnes & Noble, John's Fav, "Big Air"</li>
+              </ul>
+              <p>The product doesn't come in any variations (it comes in only one style, with no different colors, sizes or other options), so the default variant is sufficient.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/products.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "product": {
+    "title": "Burton Custom Freestyle 151",
+    "body_html": "<strong>Good snowboard!</strong>",
+    "vendor": "Burton",
+    "product_type": "Snowboard",
+    "tags": "Barnes & Noble, John's Fav, \"Big Air\""
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "product": {
+    "body_html": "<strong>Good snowboard!</strong>",
+    "created_at": "2012-02-15T15:12:55-05:00",
+    "handle": "burton-custom-Freestyle-151",
+    "id": 1048875295,
+    "product_type": "Snowboard",
+    "published_at": "2012-02-15T15:12:55-05:00",
+    "template_suffix": null,
+    "title": "Burton Custom Freestyle 151",
+    "updated_at": "2012-02-15T15:12:55-05:00",
+    "vendor": "Burton",
+    "tags": "\"Big Air\", Barnes & Noble, John's Fav",
+    "variants": [
+     {
+       "compare_at_price": null,
+       "created_at": "2012-02-15T15:12:55-05:00",
+       "fulfillment_service": "manual",
+       "grams": 0,
+       "id": 961411784,
+       "inventory_management": null,
+       "inventory_policy": "deny",
+       "option1": "Default",
+       "option2": null,
+       "option3": null,
+       "position": 1,
+       "price": "0.00",
+       "requires_shipping": true,
+       "sku": "",
+       "taxable": true,
+       "title": "Default",
+       "updated_at": "2012-02-15T15:12:55-05:00",
+       "inventory_quantity": 1
+     }
+    ],
+    "images": [
+
+    ],
+    "options": [
+     {
+       "name": "Title"
+     }
+    ]
+  }
+}
+              </pre>
+              
+              <h3>Example: Create a new product with the default variant and an image stored at a public URL</h3>
+              <p>In this example, we want to add a new product -- a snowboard -- to the shop. It will have these properties:</p>
+              <ul>
+                <li><strong><tt>title</tt>:</strong> Burton Custom Freestyle 151</li>
+                <li><strong><tt>body_html</tt>:</strong> Good snowboard! </em>(in bold text)</em></li>
+                <li><strong><tt>vendor</tt>:</strong> Burton</li>
+                <li><strong><tt>product_type</tt>:</strong> Snowboard</li>
+                <li><strong><tt>tags</tt>:</strong> Barnes & Noble, John's Fav, "Big Air"</li>
+              </ul>
+              <p>We also want to include an image with the new product; in this example, it's stored at the URL <tt>http://example.com/burton151.jpg</tt>.</p>
+              <p>The product doesn't come in any variations (it comes in only one style, with no different colors, sizes or other options), so the default variant is sufficient.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/products.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "product": {
+    "title": "Burton Custom Freestyle 151",
+    "body_html": "<strong>Good snowboard!</strong>",
+    "vendor": "Burton",
+    "product_type": "Snowboard",
+    "images": [
+      {
+        "src": "http://example.com/burton151.jpg"
+      }
+    ]
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "product": {
+    "body_html": "<strong>Good snowboard!</strong>",
+    "created_at": "2012-02-15T15:12:55-05:00",
+    "handle": "burton-custom-Freestyle-151",
+    "id": 1048875296,
+    "product_type": "Snowboard",
+    "published_at": "2012-02-15T15:12:55-05:00",
+    "template_suffix": null,
+    "title": "Burton Custom Freestyle 151",
+    "updated_at": "2012-02-15T15:12:55-05:00",
+    "vendor": "Burton",
+    "tags": "",
+    "variants": [
+      {
+       "compare_at_price": null,
+       "created_at": "2012-02-15T15:12:55-05:00",
+       "fulfillment_service": "manual",
+       "grams": 0,
+       "id": 961411785,
+       "inventory_management": null,
+       "inventory_policy": "deny",
+       "option1": "Default",
+       "option2": null,
+       "option3": null,
+       "position": 1,
+       "price": "0.00",
+       "requires_shipping": true,
+       "sku": "",
+       "taxable": true,
+       "title": "Default",
+       "updated_at": "2012-02-15T15:12:55-05:00",
+       "inventory_quantity": 1
+      }
+    ],
+    "images": [
+      {
+        "created_at": "2012-02-15T15:12:55-05:00",
+        "id": 916933536,
+        "position": 1,
+        "product_id": 1048875296,
+        "updated_at": "2012-02-15T15:12:55-05:00",
+        "src": "http://static.shopify.com/s/files/1/6909/3384/products/rails_logo.gif?1"
+      }
+    ],
+    "options": [
+      {
+        "name": "Title"
+      }
+    ]
+  }
+}
+              </pre>
+              
+              <h3>Example: Create a new product with the default variant and an base64-encoded image</h3>
+              <p>In this example, we want to add a new product -- a snowboard -- to the shop. It will have these properties:</p>
+              <ul>
+                <li><strong><tt>title</tt>:</strong> Burton Custom Freestyle 151</li>
+                <li><strong><tt>body_html</tt>:</strong> Good snowboard! </em>(in bold text)</em></li>
+                <li><strong><tt>vendor</tt>:</strong> Burton</li>
+                <li><strong><tt>product_type</tt>:</strong> Snowboard</li>
+                <li><strong><tt>tags</tt>:</strong> Barnes & Noble, John's Fav, "Big Air"</li>
+              </ul>
+              <p>We also want to include an image with the new product; in this example, it's stored locally and we've encoded it as a string using <a href="http://en.wikipedia.org/wiki/Base64">base64 encoding</a>. These strings are very long, so in this example we'll use this dummy string <tt>=== BASE64-ENCODED IMAGE ===</tt> to represent our base64-encoded image data.</p>
+              <p>The product doesn't come in any variations (it comes in only one style, with no different colors, sizes or other options), so the default variant is sufficient.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/products.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "product": {
+   "title": "Burton Custom Freestyle 151",
+   "body_html": "<strong>Good snowboard!</strong>",
+   "vendor": "Burton",
+   "product_type": "Snowboard",
+   "images": [
+     {
+       "attachment": "=== BASE64-ENCODED IMAGE ==="
+     }
+   ]
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "product": {
+   "body_html": "<strong>Good snowboard!</strong>",
+   "created_at": "2012-02-15T15:12:55-05:00",
+   "handle": "burton-custom-Freestyle-151",
+   "id": 1048875297,
+   "product_type": "Snowboard",
+   "published_at": "2012-02-15T15:12:55-05:00",
+   "template_suffix": null,
+   "title": "Burton Custom Freestyle 151",
+   "updated_at": "2012-02-15T15:12:55-05:00",
+   "vendor": "Burton",
+   "tags": "",
+   "variants": [
+     {
+       "compare_at_price": null,
+       "created_at": "2012-02-15T15:12:55-05:00",
+       "fulfillment_service": "manual",
+       "grams": 0,
+       "id": 961411786,
+       "inventory_management": null,
+       "inventory_policy": "deny",
+       "option1": "Default",
+       "option2": null,
+       "option3": null,
+       "position": 1,
+       "price": "0.00",
+       "requires_shipping": true,
+       "sku": "",
+       "taxable": true,
+       "title": "Default",
+       "updated_at": "2012-02-15T15:12:55-05:00",
+       "inventory_quantity": 1
+     }
+   ],
+   "images": [
+     {
+       "created_at": "2012-02-15T15:12:55-05:00",
+       "id": 916933537,
+       "position": 1,
+       "product_id": 1048875297,
+       "updated_at": "2012-02-15T15:12:55-05:00",
+       "src": "http://static.shopify.com/s/files/1/6909/3384/products/df3e567d6f16d040326c7a0ea29a4f41.gif?1"
+     }
+   ],
+   "options": [
+     {
+       "name": "Title"
+     }
+   ]
+  }
+}
+              </pre>
+              
+              <h3>Example: Create a new product with multiple variants</h3>
+              <p>In this example, we want to add a new product -- a t-shirt -- to the shop. It comes in three sizes:</p>
+              <ol>
+                <li><strong>Small<strong>, which sells for $15</li>
+                <li><strong>Medium<strong>, which also sells for $15</li>
+                <li><strong>Large<strong>, which sells for $20</li>
+              </ol>
+              <p>The product we will create will have these properties:</p>
+              <ul>
+                <li><strong><tt>title</tt>:<strong> Comfy T-shirt
+                <li><strong><tt>body-html</tt>:<strong> 100% cotton, plain and simple.
+                <li><strong><tt>vendor</tt>:<strong> ExampleCo
+                <li><strong><tt>product-type</tt>:<strong> t-shirt
+                <li><strong><tt>options</tt>:<strong> 1 option, called "Size"
+                <li><strong><tt>variants</tt>:<strong> Small ($15), Medium ($15), Large ($20)
+              </ul>
+              
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/products.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "product": {
+    "title": "Comfy T-Shirt",
+    "body_html": "100% cotton, plain and simple.",
+    "vendor": "ExampleCo",
+    "product_type": "t-shirt",
+    "options": [
+        {
+          "name": "Size"
+        }
+      ],
+    "variants": [
+     {
+       "option1": "Small",
+       "price": "15.00"
+     },
+     {
+       "option1": "Medium",
+       "price": "15.00"
+     },
+     {
+       "option1": "Large",
+       "price": "20.00"
+     }
+    ]
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+   "product": {
+       "body_html": "100% cotton, plain and simple.",
+       "created_at": "2012-02-20T14:46:10-05:00",
+       "handle": "comfy-t-shirt",
+       "id": 86035262,
+       "product_type": "t-shirt",
+       "published_at": "2012-02-20T14:46:10-05:00",
+       "template_suffix": null,
+       "title": "Comfy T-Shirt",
+       "updated_at": "2012-02-20T14:46:10-05:00",
+       "vendor": "ExampleCo",
+       "tags": "",
+       "variants": [{
+           "compare_at_price": null,
+           "created_at": "2012-02-20T14:46:10-05:00",
+           "fulfillment_service": "manual",
+           "grams": 0,
+           "id": 202107342,
+           "inventory_management": null,
+           "inventory_policy": "deny",
+           "option1": "Small",
+           "option2": null,
+           "option3": null,
+           "position": 1,
+           "price": "15.00",
+           "requires_shipping": true,
+           "sku": "",
+           "taxable": true,
+           "title": "Small",
+           "updated_at": "2012-02-20T14:46:10-05:00",
+           "inventory_quantity": 1
+       }, {
+           "compare_at_price": null,
+           "created_at": "2012-02-20T14:46:10-05:00",
+           "fulfillment_service": "manual",
+           "grams": 0,
+           "id": 202107352,
+           "inventory_management": null,
+           "inventory_policy": "deny",
+           "option1": "Medium",
+           "option2": null,
+           "option3": null,
+           "position": 2,
+           "price": "15.00",
+           "requires_shipping": true,
+           "sku": "",
+           "taxable": true,
+           "title": "Medium",
+           "updated_at": "2012-02-20T14:46:10-05:00",
+           "inventory_quantity": 1
+       }, {
+           "compare_at_price": null,
+           "created_at": "2012-02-20T14:46:10-05:00",
+           "fulfillment_service": "manual",
+           "grams": 0,
+           "id": 202107362,
+           "inventory_management": null,
+           "inventory_policy": "deny",
+           "option1": "Large",
+           "option2": null,
+           "option3": null,
+           "position": 3,
+           "price": "20.00",
+           "requires_shipping": true,
+           "sku": "",
+           "taxable": true,
+           "title": "Large",
+           "updated_at": "2012-02-20T14:46:10-05:00",
+           "inventory_quantity": 1
+       }],
+       "images": [],
+       "options": [{
+           "name": "Size"
+       }]
+   }
+}
+              </pre>
+              
+              <h3>Example: Create a new unpublished product</h3>
+              <p>In this example, we want to add a new product -- a snowboard -- to the shop. It will have these properties:</p>
+              <ul>
+                <li><strong><tt>title</tt>:</strong> Burton Custom Freestyle 151</li>
+                <li><strong><tt>body_html</tt>:</strong> Good snowboard! </em>(in bold text)</em></li>
+                <li><strong><tt>vendor</tt>:</strong> Burton</li>
+                <li><strong><tt>product_type</tt>:</strong> Snowboard</li>
+                <li><strong><tt>tags</tt>:</strong> Barnes & Noble, John's Fav, "Big Air"</li>
+              </ul>
+              <p>We also don't want to publish it immediately, but leave it unpublished for the time being, which means that we should set its <tt>published</tt> property to false.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/products.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "product": {
+    "title": "Burton Custom Freestyle 151",
+    "body_html": "<strong>Good snowboard!</strong>",
+    "vendor": "Burton",
+    "product_type": "Snowboard",
+    "published": false
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "product": {
+    "body_html": "<strong>Good snowboard!</strong>",
+    "created_at": "2012-02-15T15:12:56-05:00",
+    "handle": "burton-custom-freestlye-151",
+    "id": 1048875298,
+    "product_type": "Snowboard",
+    "published_at": null,
+    "template_suffix": null,
+    "title": "Burton Custom Freestlye 151",
+    "updated_at": "2012-02-15T15:12:56-05:00",
+    "vendor": "Burton",
+    "tags": "",
+    "variants": [
+      {
+        "compare_at_price": null,
+        "created_at": "2012-02-15T15:12:56-05:00",
+        "fulfillment_service": "manual",
+        "grams": 0,
+        "id": 961411787,
+        "inventory_management": null,
+        "inventory_policy": "deny",
+        "option1": "Default",
+        "option2": null,
+        "option3": null,
+        "position": 1,
+        "price": "0.00",
+        "requires_shipping": true,
+        "sku": "",
+        "taxable": true,
+        "title": "Default",
+        "updated_at": "2012-02-15T15:12:56-05:00",
+        "inventory_quantity": 1
+      }
+    ],
+    "images": [
+
+    ],
+    "options": [
+      {
+        "name": "Title"
+      }
+    ]
+  }
+}
+              </pre>
+              
+              <h3>Example: Create a new product with a metafield</h3>
+              <p>In this example, we want to add a new product -- a snowboard -- to the shop. It will have these properties:</p>
+              <ul>
+                <li><strong><tt>title</tt>:</strong> Burton Custom Freestyle 151</li>
+                <li><strong><tt>body_html</tt>:</strong> Good snowboard! </em>(in bold text)</em></li>
+                <li><strong><tt>vendor</tt>:</strong> Burton</li>
+                <li><strong><tt>product_type</tt>:</strong> Snowboard</li>
+                <li><strong><tt>tags</tt>:</strong> Barnes & Noble, John's Fav, "Big Air"</li>
+              </ul>
+              <p>We also want to give it a metafield with the following properties:</p>
+              <ul>
+                <li><strong><tt>key</tt>:<strong> new</li>
+                <li><strong><tt>value</tt>:<strong> newvalue</li>
+                <li><strong><tt>value_type</tt>:<strong> string</li>
+                <li><strong><tt>namespace</tt>:<strong> global</li>
+              </ul>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/products.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+   "product": {
+     "title": "Burton Custom Freestyle 151",
+     "body_html": "<strong>Good snowboard!</strong>",
+     "vendor": "Burton",
+     "product_type": "Snowboard",
+     "metafields": [
+       {
+         "key": "new",
+         "value": "newvalue",
+         "value_type": "string",
+         "namespace": "global"
+       }
+     ]
+   }
+ }
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+{
+   "product": {
+       "body_html": "\u003Cstrong\u003EGood snowboard!\u003C/strong\u003E",
+       "created_at": "2012-02-20T15:39:38-05:00",
+       "handle": "burton-custom-freestyle-151",
+       "id": 86050632,
+       "product_type": "Snowboard",
+       "published_at": "2012-02-20T15:39:38-05:00",
+       "template_suffix": null,
+       "title": "Burton Custom Freestyle 151",
+       "updated_at": "2012-02-20T15:39:38-05:00",
+       "vendor": "Burton",
+       "tags": "",
+       "variants": [{
+           "compare_at_price": null,
+           "created_at": "2012-02-20T15:39:38-05:00",
+           "fulfillment_service": "manual",
+           "grams": 0,
+           "id": 202139762,
+           "inventory_management": null,
+           "inventory_policy": "deny",
+           "option1": "Default",
+           "option2": null,
+           "option3": null,
+           "position": 1,
+           "price": "0.00",
+           "requires_shipping": true,
+           "sku": "",
+           "taxable": true,
+           "title": "Default",
+           "updated_at": "2012-02-20T15:39:38-05:00",
+           "inventory_quantity": 1
+       }],
+       "images": [],
+       "options": [{
+           "name": "Title"
+       }]
+   }
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFive'>
+              <tt>PUT /admin/products.json</tt>
+            </a>
+          </div>
+          <div id="collapseFive" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Change a product's title</h3>
+              <p>In this example, we want to change the <tt>title</tt> of the product whose <tt>id</tt> is <tt>70952492</tt> to "Cheeseburger in a Can"</tt>".</p>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">PUT /admin/products/70952492.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "product": {
+    "title": "Cheeseburger in a Can"
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+                {
+                   "product": {
+                       "body_html": "\u003Cp\u003ECreated by Germans, the people who invented both Hamburg and the hamburger! The simultaneous high and low point of civilization! How could you not want one?\u003C/p\u003E\r\n",
+                       "created_at": "2011-12-04T16:12:24-05:00",
+                       "handle": "canned-cheeseburger",
+                       "id": 70952492,
+                       "product_type": "Food",
+                       "published_at": "2011-12-04T16:12:24-05:00",
+                       "template_suffix": null,
+                       "title": "Cheeseburger in a Can",
+                       "updated_at": "2012-02-20T16:41:10-05:00",
+                       "vendor": "Katadyn Deutschland GmbH",
+                       "tags": "",
+                       "variants": [{
+                           "compare_at_price": null,
+                           "created_at": "2011-12-04T16:12:24-05:00",
+                           "fulfillment_service": "manual",
+                           "grams": 250,
+                           "id": 169548452,
+                           "inventory_management": "shopify",
+                           "inventory_policy": "deny",
+                           "option1": "Default Title",
+                           "option2": null,
+                           "option3": null,
+                           "position": 1,
+                           "price": "9.99",
+                           "requires_shipping": true,
+                           "sku": "FOO001",
+                           "taxable": true,
+                           "title": "Default Title",
+                           "updated_at": "2012-02-14T14:21:27-05:00",
+                           "inventory_quantity": 25
+                       }],
+                       "images": [{
+                           "created_at": "2011-12-04T16:12:25-05:00",
+                           "id": 145581452,
+                           "position": 1,
+                           "product_id": 70952492,
+                           "updated_at": "2011-12-04T16:12:25-05:00",
+                           "src": "http://static.shopify.com/s/files/1/0112/7572/products/canned-cheeseburger.jpg?242"
+                       }],
+                       "options": [{
+                           "name": "Title"
+                       }]
+                   }
+                }
+              </pre>  
+              
+              <h3>Example: Add an image to a product that doesn't have any</h3>
+              <p>In the example, we want to add the image stored online at the URL <tt>http://example.com/comfy-t-shirt.jpg</tt> to the product whose <tt>id</tt> is <tt>86041542</tt>. This product does not have any images.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">PUT /admin/products/86041542.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "product": {
+    "images": [
+       {
+         "src": "http://example.com/comfy-t-shirt.jpg"
+       }
+    ]
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+{
+   "product": {
+       "body_html": "100% cotton, plain and simple.",
+       "created_at": "2012-02-20T15:15:15-05:00",
+       "handle": "comfy-t-shirt",
+       "id": 86041542,
+       "product_type": "t-shirt",
+       "published_at": "2012-02-20T15:15:15-05:00",
+       "template_suffix": null,
+       "title": "Comfy T-shirt",
+       "updated_at": "2012-02-20T16:54:34-05:00",
+       "vendor": "ExampleCo",
+       "tags": "",
+       "variants": [{
+           "compare_at_price": null,
+           "created_at": "2012-02-20T15:15:15-05:00",
+           "fulfillment_service": "manual",
+           "grams": 0,
+           "id": 202119922,
+           "inventory_management": null,
+           "inventory_policy": "deny",
+           "option1": "Small",
+           "option2": null,
+           "option3": null,
+           "position": 1,
+           "price": "15.00",
+           "requires_shipping": true,
+           "sku": "",
+           "taxable": true,
+           "title": "Small",
+           "updated_at": "2012-02-20T15:15:15-05:00",
+           "inventory_quantity": 1
+       }, {
+           "compare_at_price": null,
+           "created_at": "2012-02-20T15:15:15-05:00",
+           "fulfillment_service": "manual",
+           "grams": 0,
+           "id": 202119932,
+           "inventory_management": null,
+           "inventory_policy": "deny",
+           "option1": "Medium",
+           "option2": null,
+           "option3": null,
+           "position": 2,
+           "price": "15.00",
+           "requires_shipping": true,
+           "sku": "",
+           "taxable": true,
+           "title": "Medium",
+           "updated_at": "2012-02-20T15:15:15-05:00",
+           "inventory_quantity": 1
+       }, {
+           "compare_at_price": null,
+           "created_at": "2012-02-20T15:15:15-05:00",
+           "fulfillment_service": "manual",
+           "grams": 0,
+           "id": 202119942,
+           "inventory_management": null,
+           "inventory_policy": "deny",
+           "option1": "Large",
+           "option2": null,
+           "option3": null,
+           "position": 3,
+           "price": "20.00",
+           "requires_shipping": true,
+           "sku": "",
+           "taxable": true,
+           "title": "Large",
+           "updated_at": "2012-02-20T15:15:15-05:00",
+           "inventory_quantity": 1
+       }],
+       "images": [{
+           "created_at": "2012-02-20T16:54:35-05:00",
+           "id": 174294062,
+           "position": 3,
+           "product_id": 86041542,
+           "updated_at": "2012-02-20T16:54:35-05:00",
+           "src": "http://static.shopify.com/s/files/1/0112/7572/products/comfy-t-shirt.jpeg.jpeg?246"
+       }],
+       "options": [{
+           "name": "Size"
+       }]
+   }
+}
+              </pre>
+              
+              <h3>Example: Add an image to a product that already has at least one image</h3>
+              <p>In this example, we want to add the image stored online at the URL  <tt>http://example.com/comfy-t-shirt-2.jpg</tt> to the product whose <tt>id</tt> is <tt>87054352</tt>. This product already has an image.</p>
+              <p>In the request body, we'll provide a new <tt>images</tt> array that is made up of the following:</p>
+              <ul>
+                <li>the <tt>images</tt> array that the product already has, and</li>
+                <li>a new element containing the URL of the image we want to add.</li>
+              </ul>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">PUT /admin/products/87054352.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "product": {
+  "id": 87054352,
+  "images": [
+      {
+        "created_at": "2012-02-22T14:42:19-05:00",
+        "id": 175728652,
+        "position": 1,
+        "product_id": 87054352,
+        "updated_at": "2012-02-22T14:42:19-05:00",
+        "src": "http://static.shopify.com/s/files/1/0112/7572/products/comfy-t-shirt.jpeg?251"
+      },
+      {
+        "src": "http://example.com/comfy-t-shirt-2.jpg"
+      }
+    ]
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+{
+    "product": {
+        "body_html": "100% Cotton!",
+        "created_at": "2012-02-22T14:40:35-05:00",
+        "handle": "comfy-t-shirt",
+        "id": 87054352,
+        "product_type": "t-shirt",
+        "published_at": "2012-02-22T14:40:35-05:00",
+        "template_suffix": null,
+        "title": "Comfy T-shirt",
+        "updated_at": "2012-02-22T14:52:13-05:00",
+        "vendor": "TeeCo",
+        "tags": "",
+        "variants": [{
+            "compare_at_price": null,
+            "created_at": "2012-02-22T14:40:35-05:00",
+            "fulfillment_service": "manual",
+            "grams": 0,
+            "id": 204363402,
+            "inventory_management": null,
+            "inventory_policy": "deny",
+            "option1": "Default",
+            "option2": null,
+            "option3": null,
+            "position": 1,
+            "price": "0.00",
+            "requires_shipping": true,
+            "sku": "",
+            "taxable": true,
+            "title": "Default",
+            "updated_at": "2012-02-22T14:40:35-05:00",
+            "inventory_quantity": 1
+        }],
+        "images": [{
+            "created_at": "2012-02-22T14:42:19-05:00",
+            "id": 175728652,
+            "position": 1,
+            "product_id": 87054352,
+            "updated_at": "2012-02-22T14:42:19-05:00",
+            "src": "http://static.shopify.com/s/files/1/0112/7572/products/love_hate_t-shirt.jpeg?252"
+        }, {
+            "created_at": "2012-02-22T14:52:13-05:00",
+            "id": 175741432,
+            "position": 2,
+            "product_id": 87054352,
+            "updated_at": "2012-02-22T14:52:13-05:00",
+            "src": "http://static.shopify.com/s/files/1/0112/7572/products/100-percent.jpeg?252"
+        }],
+        "options": [{
+            "name": "Title"
+        }]
+    }
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseSix'>
+              <tt>DELETE /admin/products/:product_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseSix" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Delete a product</h3>
+              <p>In this example, we want to delete the product whose <tt>id</tt> is <tt>86041542</tt>.</p>  
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">DELETE /admin/products/86041542.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
