@@ -1,0 +1,568 @@
+---
+layout: resource
+title: Customer
+intro: A <strong>customer</strong> resource instance represents a customer account with the shop. Customer accounts store contact information for the customer, saving logged-in customers the trouble of having to provide it at every checkout. They don't store credit card information; customers will always have to provide this. They also store some additional information about the customer for the benefit of the shopowner, such as the number of orders, the amount of money s/he has spent and number of orders s/he has made throughout his/her history with the shop as well as the shopowner's notes and tags for the customer.
+---
+<div class='row-fluid'>
+  <div class='span12'>
+    
+    <p>The shop's use of customer accounts will depend on its <strong>Customer Checkout settings</strong> (located on the <strong>Checkout and Payment</strong> page, accessible via the <strong>Preferences</strong> menu). There are three options for this setting:</p>
+    <ul>
+      <li><strong>Guest checkout only:</strong> Customer accounts are disabled. meaning that customers can't log in and can only check out as guests.</li>
+      <li><strong>Guest checkout with optional sign-in:</strong> Customer accounts are optional. Customers have the choice of either signing into their account or simply checking out as a guest. Under this setting, customers can create accounts for themselves; the shopowner can also an account for a customer and then invite him/her by email to use it.</li>
+      <li><strong>Sign-in required:</strong> Customer accounts are required. Customers can't check out unless logged in, and under this setting, the shopowner must create accounts for them first.</li>
+    </ul>
+
+    <h2>What can you do with customers using the Shopify API?</h2>
+
+    <p>The Shopify API lets you do the following with customers:</p>
+    <ul>
+      <li><strong>Get information</strong> about one or more of the shop's customer accounts.</li>
+      <li><strong>Count</strong> all or specific customer accounts.</li>
+      <li><strong>Create</strong> a new customer account.</li>
+      <li><strong>Modify</strong> a customer account.</li>
+      <li><strong>Delete</strong> a customer account.</li>
+    </ul>
+    
+    <h2>Customer properties</h2>
+    <table class='table table-striped table-bordered'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><tt>accepts_marketing</tt></strong></td>
+          <td>Indicates whether the customer has consented to be sent marketing material via email. Valid values are <tt>true</tt> and <tt>false</tt>.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>addresses</tt></strong></td>
+          <td>
+            <p>A list of addresses for the customer. Each address has the following properties:</p>
+            <ul>
+              <li><strong><tt>address1</tt>:</strong> The customer's mailing address.</li>
+              <li><strong><tt>address2</tt>:</strong> An additional field for the customer's mailing address.</li>
+              <li><strong><tt>city</tt>:</strong> The customer's city.</li>
+              <li><strong><tt>company</tt>:</strong> The customer's company.</li>
+              <li><strong><tt>country</tt>:</strong> The customer's country.</li>
+              <li><strong><tt>country_code</tt>:</strong> The two-letter country code corresponding to the customer's country.</li>
+              <li><strong><tt>default</tt>:</strong> Indicates whether this address is the default address for the customer. Valid values are <tt>true</tt> and <tt>false</tt>.</li>
+              <li><strong><tt>first_name</tt>:</strong> The customer's first name.</li>
+              <li><strong><tt>id</tt>:</strong> A unique numeric identifier for the address.</li>
+              <li><strong><tt>last_name</tt>:</strong> The customer's last name.</li>
+              <li><strong><tt>name</tt>:</strong> The customer's name.</li>
+              <li><strong><tt>phone</tt>:</strong> The customer's phone number.</li>
+              <li><strong><tt>province</tt>:</strong> The customer's province or state.</li>
+              <li><strong><tt>province_code</tt>:</strong> The two-letter province or state code for the customer's province or state.</li>
+              <li><strong><tt>zip</tt>:</strong> The customer's zip or postal code.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><strong><tt>created_at</tt></strong></td>
+          <td>The date and time when the customer record was created. The API returns this value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format.</a></td>
+        </tr>
+        <tr>
+          <td><strong><tt>email</tt></strong></td>
+          <td>The customer's email address.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>first_name</tt></strong></td>
+          <td>The customer's first name.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>id</tt></strong></td>
+          <td>The unique numeric identifier for the customer.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>last_name</tt></strong></td>
+          <td>The customer's last name.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>note</tt></strong></td>
+          <td>A note about the customer.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>orders_count</tt></strong></td>
+          <td>The number of orders associated with this customer.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>state</tt></strong></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><strong><tt>tags</tt></strong></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><strong><tt>total_spent</tt></strong></td>
+          <td>The total amount of money that the customer has spent at the shop.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>updated_at</tt></strong></td>
+          <td>The date and time when the customer account was last modified. The API returns this value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format.</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Endpoints</h2>
+    <script type="text/javascript">$(".collapse").collapse()</script>
+    <div class="accordion" id="accordion1">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseOne'>
+              <tt>GET /admin/customers.json</tt>
+          </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <h3>Query parameters</h3>
+            <p>By default, requesting a list of customers returns all the customers for that shop. You can use the optional query parameters listed below to filter the returned list by specific criteria.</p>
+
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><tt>fields</tt></strong></td>
+                  <td>A comma-separated list of the properties you want returned for each customer in the result list. By default, the returned list of customers is a list of customers with all the properties included. Use this parameter to restrict the returned list of customers to showing only those properties you specify, with each property name separated by a comma.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>limit</tt></strong></td>
+                  <td>The maximum number of customers that should be returned. By default, the maximum number of customers returned is 50. Use this parameter to change the maximum number of returned customers from 1 to 250. Setting this parameter outside the 1 - 250 range will result in an error.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>page</tt></strong></td>
+                  <td>The page of the result list to retrieve. Use this in tandem with <tt>limit</tt> to page through the customers in a shop.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>since_id</tt></strong></td>
+                  <td>The lower bound on a customer’s id. Use this parameter to restrict the returned list to only customers whose id is <em>greater than</em> the specified id.</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <h3>Example: Get a list of the shop's customers</h3>
+            <p>In this example, we want to retrieve a list of all the shop's customer accounts.</p>
+
+            <h4>Request:</h4>
+            <pre class="prettyprint linenums">GET /admin/customers.json</pre>
+            
+            <h4>Response:</h4>
+            <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "customers": [
+    {
+      "accepts_marketing": false,
+      "created_at": "2012-03-13T16:09:55-04:00",
+      "email": "bob.norman@hostmail.com",
+      "first_name": "Bob",
+      "id": 207119551,
+      "last_name": "Norman",
+      "note": null,
+      "orders_count": 0,
+      "state": null,
+      "total_spent": "0.00",
+      "updated_at": "2012-03-13T16:09:55-04:00",
+      "tags": "",
+      "addresses": [
+        {
+          "address1": "Chestnut Street 92",
+          "address2": "",
+          "city": "Louisville",
+          "company": null,
+          "country": "US",
+          "first_name": null,
+          "id": 207119551,
+          "last_name": null,
+          "phone": "555-625-1199",
+          "province": "KY",
+          "zip": "40202",
+          "name": null,
+          "province_code": null,
+          "country_code": null,
+          "default": true
+        }
+      ]
+    }
+  ]
+}
+            </pre>
+            
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseTwo'>
+              <tt>GET /admin/customers/search.json</tt>
+            </a>
+          </div>
+          <div id="collapseTwo" class="accordion-body collapse">
+            <div class="accordion-inner">
+              
+              <h3>Query parameters</h3>
+              <table class="table table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong><tt>f</tt></strong></td>
+                    <td>Short for "filters". Use this parameter to filter results.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>fields</tt></strong></td>
+                    <td>A comma-separated list of the properties you want returned for each customer in the result list. By default, the returned list of customers is a list of customers with all the properties included. Use this parameter to restrict the returned list of customers to showing only those properties you specify, with each property name separated by a comma.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>limit</tt></strong></td>
+                    <td>The maximum number of customers that should be returned. By default, the maximum number of customers returned is 50. Use this parameter to change the maximum number of returned customers from 1 to 250. Setting this parameter outside the 1 - 250 range will result in an error.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>order</tt></strong></td>
+                    <td>The field and direction by which results should be ordered. The default value is <tt>last_order_date DESC</tt></td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>page</tt></strong></td>
+                    <td>The page of the result list to retrieve. Use this in tandem with <tt>limit</tt> to page through the customers in a shop.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>q</tt></strong></td>
+                    <td>Short for "query". Use this parameter to search for customers by name.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>since_id</tt></strong></td>
+                    <td>The lower bound on a customer’s id. Use this parameter to restrict the returned list to only customers whose id is <em>greater than</em> the specified id.</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <h3>Example: Search for customers based on criteria</h3>
+              <p>In this example, we want to retrieve a list of the customers whose address is in the United States and who are named "Bob".</p>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/customers/search.json?f[]=country:United States&q=Bob</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "customers": [
+    {
+      "accepts_marketing": false,
+      "created_at": "2012-03-13T16:09:55-04:00",
+      "email": "bob.norman@hostmail.com",
+      "first_name": "Bob",
+      "id": 207119551,
+      "last_name": "Norman",
+      "note": null,
+      "orders_count": 0,
+      "state": null,
+      "total_spent": "0.00",
+      "updated_at": "2012-03-13T16:09:55-04:00",
+      "tags": "",
+      "addresses": [
+        {
+          "address1": "Chestnut Street 92",
+          "address2": "",
+          "city": "Louisville",
+          "company": null,
+          "country": "US",
+          "first_name": null,
+          "id": 207119551,
+          "last_name": null,
+          "phone": "555-625-1199",
+          "province": "KY",
+          "zip": "40202",
+          "name": null,
+          "province_code": null,
+          "country_code": null,
+          "default": true
+        }
+      ]
+    }
+  ]
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseThree'>
+              <tt>GET /admin/customers/:customer_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseThree" class="accordion-body collapse">
+            <div class="accordion-inner">
+              
+              <h3>Example: Get a single customer account</h3>
+              <p>In this example, we want to retrieve the customer account whose <tt>id</tt> is <tt>207119551</tt>.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/customers/207119551.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "customer": {
+    "accepts_marketing": false,
+    "created_at": "2012-03-13T16:09:55-04:00",
+    "email": "bob.norman@hostmail.com",
+    "first_name": "Bob",
+    "id": 207119551,
+    "last_name": "Norman",
+    "note": null,
+    "orders_count": 0,
+    "state": null,
+    "total_spent": "0.00",
+    "updated_at": "2012-03-13T16:09:55-04:00",
+    "tags": "",
+    "addresses": [
+      {
+        "address1": "Chestnut Street 92",
+        "address2": "",
+        "city": "Louisville",
+        "company": null,
+        "country": "US",
+        "first_name": null,
+        "id": 207119551,
+        "last_name": null,
+        "phone": "555-625-1199",
+        "province": "KY",
+        "zip": "40202",
+        "name": null,
+        "province_code": null,
+        "country_code": null,
+        "default": true
+      }
+    ]
+  }
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFour'>
+              <tt>GET /admin/customers/count.json</tt>
+            </a>
+          </div>
+          <div id="collapseFour" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Count all the customer accounts</h3>
+              <p>In this example, we want to count all the customer accounts.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/customers/count.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "count": 1
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFour'>
+              <tt>POST /admin/customer.json</tt>
+            </a>
+          </div>
+          <div id="collapseFour" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Create a new customer account</h3>
+              <p>In this example, we want to create a new customer with the following properties:</p>
+              <ul>
+                <li><strong>First name:</strong> Steve</li>
+                <li><strong>Last name:</strong> Lastnameson</li>
+                <li><strong>Email:</strong> steve.lastnameson@lastnamesonco.com</li>
+                <li><strong>Address:</strong> 123 Oak Street, Ottawa, Ontario, Canada 123 ABC</li>
+                <li><strong>Phone:</strong> 555-1212</li>
+              </ul>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/customers.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "customer": {
+    "first_name": "Steve",
+    "last_name": "Lastnameson",
+    "email": "steve.lastnameson@lastnamesonco.com",
+    "addresses": [
+      {
+        "address1": "123 Oak St",
+        "city": "Ottawa",
+        "country": "CA",
+        "first_name": "Mother",
+        "last_name": "Lastnameson",
+        "phone": "555-1212",
+        "province": "ON",
+        "zip": "123 ABC"
+      }
+    ]
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "customer": {
+    "accepts_marketing": null,
+    "created_at": "2012-03-13T16:10:19-04:00",
+    "email": "steve.lastnameson@lastnamesonco.com",
+    "first_name": "Steve",
+    "id": 1018520300,
+    "last_name": "Lastnameson",
+    "note": null,
+    "orders_count": 0,
+    "state": "disabled",
+    "total_spent": "0.00",
+    "updated_at": "2012-03-13T16:10:19-04:00",
+    "tags": "",
+    "addresses": [
+      {
+        "address1": "123 Oak St",
+        "address2": null,
+        "city": "Ottawa",
+        "company": null,
+        "country": "Canada",
+        "first_name": "Mother",
+        "id": 1053317354,
+        "last_name": "Lastnameson",
+        "phone": "555-1212",
+        "province": "Ontario",
+        "zip": "123 ABC",
+        "name": "Mother Lastnameson",
+        "province_code": "ON",
+        "country_code": "CA",
+        "default": true
+      }
+    ]
+  }
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFive'>
+              <tt>PUT /admin/customers/:customer_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseFive" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Make changes to a customer account's details</h3>
+              <p>In this example, we want to modify the customer whose <tt>id</tt> is <tt>70107972</tt>, changing the email address is <tt>differentemail@differenthost.com</tt>.</p>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">PUT /admin/customers/70107972.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "customer": {
+    "email": "differentemail@differenthost.com"
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+{
+  "customer": {
+    "accepts_marketing": false,
+    "created_at": "2011-12-04T22:38:06-05:00",
+    "email": "differentemail@differenthost.com",
+    "first_name": "Alice",
+    "id": 70107972,
+    "last_name": "Testshopper",
+    "last_order_id": null,
+    "note": null,
+    "orders_count": 0,
+    "state": "disabled",
+    "total_spent": "0.00",
+    "updated_at": "2012-04-04T22:53:58-04:00",
+    "tags": "",
+    "last_order_name": null,
+    "addresses": [{
+      "address1": "4168 Trails End Road",
+      "address2": "",
+      "city": "Fort Lauderdale",
+      "company": "",
+      "country": "United States",
+      "first_name": "Alice",
+      "id": 96883292,
+      "last_name": "Testshopper",
+      "phone": "954-384-3385",
+      "province": "Florida",
+      "zip": "33308",
+      "name": "Alice Testshopper",
+      "province_code": "FL",
+      "country_code": "US",
+      "default": true
+    }]
+  }
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseSix'>
+              <tt>DELETE /admin/customer/:customer_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseSix" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Delete a customer</h3>
+              <p>In this example, we want to delete the customer whose <tt>id</tt> is <tt>70107972</tt>.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">DELETE /admin/customers/70107972.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
