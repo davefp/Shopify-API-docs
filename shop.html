@@ -1,0 +1,174 @@
+---
+layout: resource
+title: shop
+intro: The Shopify API's <strong>shop</strong> object is a collection of the general settings information about the shop. The shopowner can read and edit this information by going to the <strong>General settings</strong> page in the admin (accessed via the <strong>Preferences</strong> menu).
+---
+<div class='row-fluid'>
+  <div class='span12'>
+    
+    <p>*** ADDITIONAL TEXT GOES HERE ***</p>
+
+    <h2>What can you do with the shop object using the Shopify API?</h2>
+    <p>The Shopify API lets you do the following with shops:</p>
+    <ul>
+      <li><strong>Get information</strong> about the shop.</li>
+    </ul>
+    <p>The API doesn't let you do anything other than retrieve information about the shop. Only the shopowner can modify the information about the shop, and only manually via the <strong>General settings</strong> page in the admin.</p>
+    
+    <h2>Shop properties</h2>
+    <table class='table table-striped table-bordered'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><tt>address1</tt></strong></td>
+          <td>The shop's street address.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>city</tt></strong></td>
+          <td>The city in which the shop is located.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>country</tt></strong></td>
+          <td>The country in which the shop is located.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>created_at</tt></strong></td>
+          <td>The date and time when the shop was created. The API returns this value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format.</a></td>
+        </tr>
+        <tr>
+          <td><strong><tt>currency</tt></strong></td>
+          <td>The three-letter code for the currency that the shop accepts.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>domain</tt></strong></td>
+          <td>The shop's domain.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>email</tt></strong></td>
+          <td>The contact email address for the shop.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>id</tt></strong></td>
+          <td>A unique numeric identifier for the shop.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>money_format</tt></strong></td>
+          <td>A string representing the way currency is formatted when the currency isn't specified.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>money_with_currency_format</tt></strong></td>
+          <td>A string representing the way currency is formatted when the currency is specified.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>myshopify_domain</tt></strong></td>
+          <td>The shop's "myshopify.com" domain.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>name</tt></strong></td>
+          <td>The name of the shop.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>phone</tt></strong></td>
+          <td>The contact phone number for the shop.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>plan_name</tt></strong></td>
+          <td>The name of the shop's pricing plan.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>province</tt></strong></td>
+          <td>The province or state of the shop's address.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>public</tt></strong></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><strong><tt>shop_owner</tt></strong></td>
+          <td>The username of the shopowner.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>source</tt></strong></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><strong><tt>tax_shipping</tt></strong></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><strong><tt>taxes_included</tt></strong></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><strong><tt>timezone</tt></strong></td>
+          <td>The name of the shop's time zone.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>zip</tt></strong></td>
+          <td>The zip or postal code of the shop's address.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Endpoints</h2>
+    <script type="text/javascript">$(".collapse").collapse()</script>
+    <div class="accordion" id="accordion1">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseOne'>
+              <tt>GET /admin/shop.json</tt>
+          </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse">
+          <div class="accordion-inner">
+            
+            <h3>Example: Get the shop's properties</h3>
+            
+            <h4>Request:</h4>
+            <pre class="prettyprint linenums">GET /admin/shop.json</pre>
+            
+            <h4>Response:</h4>
+            <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "shop": {
+    "address1": "1 Infinite Loop",
+    "city": "Cupertino",
+    "country": "US",
+    "created_at": "2007-12-31T19:00:00-05:00",
+    "customer_email": "customers@apple.com",
+    "domain": "shop.apple.com",
+    "email": "steve@apple.com",
+    "id": 690933842,
+    "name": "Apple Computers",
+    "phone": null,
+    "province": "California",
+    "public": false,
+    "source": null,
+    "zip": "95014",
+    "currency": "USD",
+    "timezone": "(GMT-05:00) Eastern Time (US & Canada)",
+    "shop_owner": "Steve Jobs",
+    "money_format": "$ {{amount}}",
+    "money_with_currency_format": "$ {{amount}} USD",
+    "taxes_included": null,
+    "tax_shipping": null,
+    "plan_name": "enterprise",
+    "myshopify_domain": "apple.myshopify.com"
+  }
+}
+            </pre>
+            
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
