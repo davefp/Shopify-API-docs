@@ -1,0 +1,733 @@
+---
+layout: resource
+title: Custom Collection
+intro: A <strong>custom collection</strong> is a grouping of products that a shopowner can create to make their shops easier to browse. A shopowner creates a custom collection and then selects the products that will go into it.
+---
+<div class='row-fluid'>
+  <div class='span12'>
+    
+    <p>Custom collections are typically displayed to customers so that customers can select them and then view only the products in the collection they selected. They're typically used to break down the catalog of products into categories and make the shop easier to browse.</p>
+    <p>Shopify shops start with a single custom collection called <strong>frontpage</strong>, the collection of products shown on the shop's front page.</p>
+    <p>In addition to custom collections, there are also smart collections, which are grouping of products that are automatically filled based on simple rules defined by the shopowner.</p>
+
+    <h2>What can you do with custom collections using the Shopify API?</h2>
+
+    <p>The Shopify API lets you do the following with custom collections:</p>
+    <ul>
+      <li><strong>Get information</strong> about one or more custom collections</li>
+      <li><strong>Count</strong> all or specific custom collections</li>
+      <li><strong>Create</strong> a new custom collection</li>
+      <li><strong>Modify</strong> a custom collection</li>
+      <li><strong>Delete</strong> a custom collection</li>
+    </ul>
+    <p>Just about anything that can be done with an custom collection through the shop's admin page can also be done through the API.</p>
+    
+    <h2>Custom collection properties</h2>
+    <table class='table table-striped table-bordered'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><tt>body_html</tt></strong></td>
+          <td>The description of the custom collection, complete with HTML markup. Many templates display this on their custom collection pages.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>handle</tt></strong></td>
+          <td>A human-friendly unique string for the custom collection automatically generated from its <code>title</code>. This is used in shop themes by the Liquid templating language to refer to the custom collection.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>id</tt></strong></td>
+          <td>The unique numeric identifier for the custom collection.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>published_at</tt></strong></td>
+          <td>
+            <p>This can have two different types of values, depending on whether the custom collection has been published (i.e., made visible to customers):</p>
+            <ul>
+              <li><strong>If the custom collection is published,</strong> this value is the date and time when it was published. The API returns this value in <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601 format</a>.</li>
+              <li><strong>If the custom collection is hidden (i.e., not published),''' this value is <tt>null</tt>. Changing a custom collection's status from published to hidden changes its <tt>published_at</tt> property to <tt>null</tt>.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><strong><tt>sort_order</tt></strong></td>
+          <td>
+            <p>The order in which products in the custom collection appear. Valid values are:</p>
+            <ul>
+              <li><strong><tt>alpha-asc</tt>:</strong> Alphabetically, in ascending order (A - Z)</li>
+              <li><strong><tt>alpha-desc</tt>:</strong> Alphabetically, in descending order (Z - A)</li>
+              <li><strong><tt>best-selling</tt>:</strong> By best-selling</li>
+              <li><strong><tt>created</tt>:</strong> By date created, in ascending order (oldest - newest)</li>
+              <li><strong><tt>created-desc</tt>:</strong> By date created, in descending order (newest - oldest)</li>
+              <li><strong><tt>manual</tt>:</strong> Ordered by the shopowner</li>
+              <li><strong><tt>price-asc</tt>:</strong> By price, in ascending order (lowest - highest)</li>
+              <li><strong><tt>price-desc</tt>:</strong> By price, in descending order (highest - lowest)</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><strong><tt>title</tt></strong></td>
+          <td>The name of the custom collection.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>updated_at</tt></strong></td>
+          <td>The date and time when the custom collection was last modified. The API returns this value in <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601 format.</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Endpoints</h2>
+    <script type="text/javascript">$(".collapse").collapse()</script>
+    <div class="accordion" id="accordion1">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseOne'>
+              <tt>GET /admin/custom_collections.json</tt>
+          </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <h3>Query parameters</h3>
+            <p>By default, requesting a list of custom collections returns all the custom collections for that shop. You can use the optional query parameters listed below to filter the returned list by specific criteria.</p>
+
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><tt>created_at_max</tt></strong></td>
+                  <td>The upper bound on the date and time of creation (its <tt>created_at</tt> value) for the custom collections you want to retrieve. Use this parameter to retrieve only custom collections that were created <em>before</em> a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>created_at_min</tt></strong></td>
+                  <td>The lower bound on the date and time of creation (its <tt>created_at</tt> value) for the custom collections you want to retrieve. Use this parameter to retrieve only custom collections that were created <em>after</em> a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>fields</tt></strong></td>
+                  <td>A comma-separated list of the properties you want returned for each article in the result list. By default, the returned list of custom collections is a list of custom collections with all the properties included. Use this parameter to restrict the returned list of custom collections to showing only those properties you specify, with each property separated by a comma.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>handle</tt></strong></td>
+                  <td>The handle of the custom collection to retrieve. Use this parameter to retrieve only the custom collection with that handle.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>limit</tt></strong></td>
+                  <td>The maximum number of custom collections that should be returned. By default, the maximum number of custom collections returned is 50. Use this parameter to change the maximum number of returned custom collections from 1 to 250. Setting this parameter outside the 1 - 250 range will result in an error.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>page</tt></strong></td>
+                  <td>The page of the result list to retrieve. Use this in tandem with <tt>limit</tt> to page through the custom collections in a shop.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>product_id</tt></strong></td>
+                  <td>The <tt>id</tt> of a specific product. Use this parameter to retrieve only those custom collections that include that product.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>published_at_max</tt></strong></td>
+                  <td>The upper bound on the date and time of when a article was published (its <tt>published_at</tt> value) for the custom collections you want to retrieve. Use this parameter to retrieve only custom collections that were published <em>before</em> a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>published_at_min</tt></strong></td>
+                  <td>The lower bound on the date and time of when a article was published (its <tt>published_at</tt> value) for the custom collections you want to retrieve. Use this parameter to retrieve only custom collections that were published <em>after</em> a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>published_status</tt></strong></td>
+                  <td>The status – published, unpublished or both – of the custom collections you want to retrieve. Valid values are:
+                    <ul>
+                      <li><strong><tt>any<tt> (default):</strong> Use this value to retrieve both published and unpublished custom collections.</li>
+                      <li><strong><tt>published<tt>:</strong> Use this value to retrieve only custom collections that are published (created and visible to customers).</li>
+                      <li><strong><tt>unpublished<tt>:</strong> Use this value to retrieve only custom collections that are unpublished (created, but not yet visible to customers).</li>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong><tt>since_id</tt></strong></td>
+                  <td>The lower bound on a article’s <tt>id</tt>. Use this parameter to restrict the returned list to only custom collections whose <tt>id</tt> is <em>greater than</em> the specified <tt>id</tt>.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>status</tt></strong></td>
+                  <td>
+                    <p>The status – published, unpublished or both – of the custom collections you want to retrieve. Valid values are:</p>
+                    <ul>
+                      <li><strong><tt>any</tt>:</strong> Use this value to retrieve both published and unpublished custom collections. This is the default value.
+                      <li><strong><tt>published</tt>:</strong> Use this value to retrieve only custom collections that are published (created and visible to customers).
+                      <li><strong><tt>unpublished</tt>:</strong> Use this value to retrieve only custom collections that are unpublished (created, but not yet visible to customers).
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong><tt>title</tt></strong></td>
+                  <td>The title of a custom collection. Use this parameter to retrieve only the custom collection with the specified title.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>updated_at_max</tt></strong></td>
+                  <td>The upper bound on the date and time of a article’s last update (its <tt>updated_at</tt> value) for the custom collections you want to retrieve. Use this parameter to retrieve only custom collections that were updated <em>before</em> a given date and time.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>updated_at_min</tt></strong></td>
+                  <td>The lower bound on the date and time of a article's last update (its <tt>updated_at</tt> value) for the custom collections you want to retrieve. Use this parameter to retrieve only custom collections that were updated <em>before</em> a given date and time.</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <h3>Example: Get a list of all the custom collections</h3>
+            <p>In this example, we want to retrieve all the custom collections in the shop.</p>
+            
+            <h4>Request:</h4>
+            <pre class="prettyprint linenums">GET /admin/custom_collections.json</pre>
+            
+            <h4>Response:</h4>
+            <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "custom_collections": [{
+    "body_html": "\u003Cp\u003EThey don't make these any more, so they're going for a steal!\u0026nbsp;\u003C/p\u003E\r\n",
+    "handle": "clearance",
+    "id": 7281783,
+    "published_at": "2012-04-01T14:39:24-04:00",
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Clearance",
+    "updated_at": "2012-04-01T14:39:24-04:00"
+  }, {
+    "body_html": null,
+    "handle": "frontpage",
+    "id": 5750672,
+    "published_at": "2011-11-28T18:50:38-05:00",
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Frontpage",
+    "updated_at": "2011-11-28T18:50:39-05:00"
+  }, {
+    "body_html": "\u003Cp\u003EThese are a few of our favorite things!\u0026nbsp;\u003C/p\u003E\r\n",
+    "handle": "our-faves",
+    "id": 7281307,
+    "published_at": "2012-04-01T14:30:35-04:00",
+    "sort_order": "manual",
+    "template_suffix": null,
+    "title": "Our Faves",
+    "updated_at": "2012-04-01T14:30:35-04:00",
+    "image": {
+       "created_at": "2012-04-01T13:24:53-04:00",
+       "src": "http://static.shopify.com/s/files/1/0112/7572/collections/smiley-d1.png?256"
+    }
+  }, {
+     "body_html": "\u003Cp\u003EBecause many places are \"No shoes, no \u003Cb\u003E\u003Ci\u003Eshirts\u003C/i\u003E\u003C/b\u003E, \u0026nbsp;no service!\u003C/p\u003E\r\n",
+     "handle": "t-shirts",
+     "id": 7281785,
+     "published_at": "2012-04-01T14:40:32-04:00",
+     "sort_order": "alpha-asc",
+     "template_suffix": null,
+     "title": "T-Shirts",
+     "updated_at": "2012-04-01T14:40:32-04:00",
+     "image": {
+         "created_at": "2012-04-01T14:40:32-04:00",
+         "src": "http://static.shopify.com/s/files/1/0112/7572/collections/t-shirt.jpg?256"
+     }
+  }]
+}
+            </pre>
+            
+            <h3>Example: Get a list of the custom collections whose id comes after a specified value</h3>
+            <p>In this example, we want to retrieve a list of custom collections whose <tt>id</tt> is after <tt>7281500</tt>.</p>
+            
+            <h4>Request:</h4>
+            <pre class="prettyprint linenums">GET /admin/custom_collections.json?since_id=7281500</pre>
+
+            <h4>Response:</h4>
+            <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "custom_collections": [{
+    "body_html": "\u003Cp\u003EThey don't make these any more, so they're going for a steal!\u0026nbsp;\u003C/p\u003E\r\n",
+    "handle": "clearance",
+    "id": 7281783,
+    "published_at": "2012-04-01T14:39:24-04:00",
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Clearance",
+    "updated_at": "2012-04-01T14:39:24-04:00"
+  }, {
+     "body_html": "\u003Cp\u003EBecause many places are \"No shoes, no \u003Cb\u003E\u003Ci\u003Eshirts\u003C/i\u003E\u003C/b\u003E, \u0026nbsp;no service!\u003C/p\u003E\r\n",
+     "handle": "t-shirts",
+     "id": 7281785,
+     "published_at": "2012-04-01T14:40:32-04:00",
+     "sort_order": "alpha-asc",
+     "template_suffix": null,
+     "title": "T-Shirts",
+     "updated_at": "2012-04-01T14:40:32-04:00",
+     "image": {
+         "created_at": "2012-04-01T14:40:32-04:00",
+         "src": "http://static.shopify.com/s/files/1/0112/7572/collections/t-shirt.jpg?256"
+     }
+  }]
+}
+            </pre>
+            
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseTwo'>
+              <tt>GET /admin/custom_collections/:custom_collection_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseTwo" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Get a single custom collection</h3>
+              <p>In this example, we want to retrieve all the properties of a custom collection whose <tt>id</tt> is <tt>7281307</tt>.</p>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/custom_collections/7281307.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+{
+  "custom_collection": {
+    "body_html": "\u003Cp\u003EThese are a few of our favorite things!\u0026nbsp;\u003C/p\u003E\r\n",
+    "handle": "our-faves",
+    "id": 7281307,
+    "published_at": "2012-04-01T14:30:35-04:00",
+    "sort_order": "manual",
+    "template_suffix": null,
+    "title": "Our Faves",
+    "updated_at": "2012-04-01T14:30:35-04:00",
+    "image": {
+      "created_at": "2012-04-01T13:24:53-04:00",
+      "src": "http://static.shopify.com/s/files/1/0112/7572/collections/smiley-d1.png?256"
+    }
+  }
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseThree'>
+              <tt>GET /admin/custom_collections/count.json</tt>
+            </a>
+          </div>
+          <div id="collapseThree" class="accordion-body collapse">
+            <div class="accordion-inner">
+              
+              <h3>Query parameters</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong><tt>product_id</tt></strong></td>
+                    <td>The <tt>id</tt> of a product whose collections you want to count. Use this parameter to count only custom collections that include the product with this <tt>id</tt>.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>published_at_max</tt></strong></td>
+                    <td>The upper bound on the date and time of when a article was published (its <tt>published_at</tt> value) for the custom collections you want to count. Use this parameter to count only custom collections that were published <em>before</em> a given date and time.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>published_at_min</tt></strong></td>
+                    <td>The lower bound on the date and time of when a article was published (its <tt>published_at</tt> value) for the custom collections you want to count. Use this parameter to count only custom collections that were published <em>after</em> a given date and time.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>published_status</tt></strong></td>
+                    <td>
+                      <p>The status – published, unpublished or both – of the custom collections you want to count. Valid values are:</p>
+                      <ul>
+                        <li><strong><tt>any</tt> (default):</strong> Use this value to count both published and unpublished custom collections.</li>
+                        <li><strong><tt>published</tt>:</strong> Use this value to count only custom collections that are published (created and visible to customers).</li>
+                        <li><strong><tt>unpublished</tt>:</strong> Use this value to count only custom collections that are unpublished (created, but not yet visible to customers).</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>since_id</tt></strong></td>
+                    <td>The lower bound on a custom collection’s <tt>id</tt>. Use this parameter to count only custom collections whose <tt>id</tt> is <em>greater than</em> the specified id.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>title</tt></strong></td>
+                    <td>The <tt>title</tt> of the custom collections you want to count. Use this parameter to count only custom collections with a specific <tt>title</tt>.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>updated_at_max</tt></strong></td>
+                    <td>The upper bound on the date and time of the last update (its <tt>updated_at</tt> value) for the custom collections you want to count. Use this parameter to retrieve only custom collections that were updated <em>before</em> a given date and time.</td>
+                  </tr>
+                  <tr>
+                    <td><strong><tt>updated_at_min</tt></strong></td>
+                    <td>The lower bound on the date and time of the last update (its <tt>updated_at</tt> value) for the custom collections you want to count. Use this parameter to retrieve only custom collections that were updated <em>before</em> a given date and time.</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <h3>Example: Count custom collection</h3>
+              <p>In this example, we want the number of the shop's complete set of custom collections.</p>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/custom_collections/count.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "count": 4
+}
+              </pre>
+              
+              <h3>Example: Count only the collections that include a specific product</h3>
+              <p>In this example, we want the number of collections that include the product whose <tt>id</tt> is <tt>632910392</tt>.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/custom_collections/count.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "count": 2
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFour'>
+              <tt>POST /admin/custom_collections.json</tt>
+            </a>
+          </div>
+          <div id="collapseFour" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Create a new custom collection</h3>
+              <p>In this example, we want to create a new custom collection with the <tt>title</tt> "Macbooks".</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/custom_collections.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "custom_collection": {
+    "title": "Macbooks"
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "custom_collection": {
+    "body_html": null,
+    "handle": "macbooks",
+    "id": 1063001506,
+    "published_at": "2012-03-13T16:10:15-04:00",
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Macbooks",
+    "updated_at": "2012-03-13T16:10:15-04:00"
+  }
+}
+              </pre>
+              
+              <h3>Example: Create a new, unpublished custom collection</h3>
+              <p>In this example, we want to create a new custom collection with the <tt>title</tt> "Macbooks", but leave it unpublished.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/custom_collections.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "custom_collection": {
+    "title": "Macbooks",
+    "published": false
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "custom_collection": {
+    "body_html": null,
+    "handle": "macbooks",
+    "id": 1063001509,
+    "published_at": null,
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Macbooks",
+    "updated_at": "2012-03-13T16:10:16-04:00"
+  }
+}
+              </pre>
+              
+              <h3>Example: Create a new custom collection with an image from an URL</h3>
+              <p>In this example, we want to create a new custom collection with the <tt>title</tt> "Macbooks" and assign it the image stored at the URL <tt>http://example.com/rails_logo.gif</tt>. Shopify will copy the image from that location and store it locally.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/custom_collections.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "custom_collection": {
+    "title": "Macbooks",
+    "image": {
+      "src": "http://example.com/rails_logo.gif"
+    }
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "custom_collection": {
+    "body_html": null,
+    "handle": "macbooks",
+    "id": 1063001508,
+    "published_at": "2012-03-13T16:10:15-04:00",
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Macbooks",
+    "updated_at": "2012-03-13T16:10:15-04:00"
+  }
+}
+              </pre>
+              
+              <h3>Example: Create a new custom collection with a base64-encoded image</h3>
+              <p>In this example, we want to create a new custom collection with the <tt>title</tt> "Macbooks" and assign it a base64-encoded image which we'll include in the request body. Shopify will decode the base64-encoded image and store it locally.</p>
+              <p>For the purposes of this example, we'll represent the base64-encoded image with the string <tt>=== BASE64-ENCODED IMAGE ===</tt>.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/custom_collections.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "custom_collection": {
+    "title": "Macbooks",
+    "image": {
+      "attachment": "=== BASE64-ENCODED IMAGE ==="
+    }
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "custom_collection": {
+    "body_html": null,
+    "handle": "macbooks",
+    "id": 1063001507,
+    "published_at": "2012-03-13T16:10:15-04:00",
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Macbooks",
+    "updated_at": "2012-03-13T16:10:15-04:00"
+  }
+}
+              </pre>
+              
+              <h3>Example: Create a new custom collection with a metafield</h3>
+              <p>In this example, we want to create a new custom collection with the <tt>title</tt> "Macbooks" and a metafield with the following properties:</p>
+              <ul>
+                <li><strong><tt>key</tt>:</strong> new</li>
+                <li><strong><tt>value</tt>:</strong> newvalue</li>
+                <li><strong><tt>value_type</tt>:</strong> string</li>
+                <li><strong><tt>namespace</tt>:</strong> global</li>
+              </ul>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/custom_collections.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "custom_collection": {
+     "title": "Macbooks",
+     "metafields": [
+       {
+         "key": "new",
+         "value": "newvalue",
+         "value_type": "string",
+         "namespace": "global"
+       }
+     ]
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "custom_collection": {
+    "body_html": null,
+    "handle": "macbooks",
+    "id": 1063001505,
+    "published_at": "2012-03-13T16:10:15-04:00",
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Macbooks",
+    "updated_at": "2012-03-13T16:10:15-04:00"
+  }
+}
+              </pre>
+              
+              <h3>Example: Create a new custom collection and assign an image and products to it</h3>
+              <p>In this example, we want to create a new custom collection and do the following:</p>
+              <ul>
+                <li>Give it the <tt>title</tt> "Snacks"</li>
+                <li>Assign it with the image from the URL <tt>http://example.com/snack.png</tt></li>
+                <li>Put the products with the following <tt>id</tt>s into it:
+                  <ul>
+                    <li>71048502</li>
+                    <li>70952492</li>
+                    <li>71035132</li>
+                  </ul>
+                </li>
+              </ul>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/custom_collections.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "custom_collection": {
+    "title": "Snacks",
+    "body_html": "The tastiest treats in our shop!",
+    "image": {
+      "src": "http://www.joeydevilla.com/wordpress/wp-content/uploads/2010/12/john-candy-pierogies.jpg"
+    },
+    "collects": [
+      {
+        "product_id": 71048502
+      },
+      {
+        "product_id": 70952492
+      },
+      {
+        "product_id": 71035132
+      }
+    ]
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+{
+  "custom_collection": {
+    "body_html": "The tastiest treats in our shop!",
+    "handle": "snacks",
+    "id": 7282705,
+    "published_at": "2012-04-01T22:21:18-04:00",
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Snacks",
+    "updated_at": "2012-04-01T22:21:18-04:00",
+    "image": {
+      "created_at": "2012-04-01T22:21:19-04:00",
+      "src": "http://static.shopify.com/s/files/1/0112/7572/collections/john-candy-pierogies.jpeg?257"
+    }
+  }
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFive'>
+              <tt>PUT /admin/custom_collections/:custom_collection_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseFive" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Change a custom collection's description</h3>
+              <p>In this example, we want to change the description of the smart collection whose <tt>id</tt> is <tt>7282781</tt> to "Candy bars, potato chips and other goodies".</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">PUT /admin/custom_collections/7282781.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "custom_collection": {
+    "body_html": "Candy bars, potato chips and other goodies"
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "custom_collection": {
+    "body_html": "Candy bars, potato chips and other goodies",
+    "handle": "snacks",
+    "id": 7282781,
+    "published_at": "2012-04-01T22:58:46-04:00",
+    "sort_order": "alpha-asc",
+    "template_suffix": null,
+    "title": "Snacks",
+    "updated_at": "2012-04-01T23:57:48-04:00"
+  }
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseSix'>
+              <tt>DELETE /admin/custom collection/:custom_collection_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseSix" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Delete a custom collection</h3>
+              <p>In this example, we want to delete the custom collection whose <tt>id</tt> is <tt>841564295</tt>.</p>
+              
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">/admin/custom collection/841564295.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
