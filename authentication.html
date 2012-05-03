@@ -1,0 +1,224 @@
+---
+layout: default
+title: authentication
+---
+
+<p>Shopify implements OAuth2 as the primary mechanism for authenticating against our API. For a detailed technical explanation of the spec, see <a href="http://oauth.net/2/">here</a>.</p>
+
+<h2>Basics</h2>
+
+<p>Every Shopify app is issued an <em>api key</em> and a <em>shared secret</em>. These are shown on your app’s page in the Partners dashboard. The secret should be kept secret: If a third party gets access to it they’ll be able to impersonate you and get access to any shop that has your app installed.</p>
+
+<p>There are several steps that an app must complete in sequence to authenticate against a shop, at the end of which a token is generated that allows the app to make calls to the API on behalf of the merchant.</p>
+
+<h2>Step 1</h2>
+
+<p>To initiate authentication, redirect the merchant to the following URL:</p>
+
+<pre class="prettyprint linenums">GET https://SHOP_NAME.myshopify.com/admin/oauth/authorize</pre>
+
+<p>with the following parameters:</p>
+
+<table class="table table-striped table-bordered">
+  <tr>
+    <td><code>client_id</code></td>
+    <td>Required</td>
+    <td>The API key for your app</td>
+  </tr>
+  <tr>
+    <td><code>scope</code></td>
+    <td>Required</td>
+    <td>The list of required scopes (explained below)</td>
+  </tr>
+  <tr>
+    <td><code>redirect_uri</code></td>
+    <td>Optional</td>
+    <td>The URL that the merchant will be sent to once authentication is complete. Must be the same host as the Return URL specified in the application settings</td>
+  </tr>
+</table>
+
+<p>Once here, the merchant will be asked to grant the requested permissions.</p>
+
+<p>Assuming the user grants access, Shopify redirects to the redirect_url specified by the app with a temporary access token code as a parameter. Given the redirect URL</p>
+
+<pre class="prettyprint linenums">http://shopify.com/app</pre>
+
+<p>the call will look like this:</p>
+
+<pre class="prettyprint linenums">GET http://shopify.com/app?code=TEMP_TOKEN</pre>
+
+<h2>Step 2</h2>
+
+<p>Exchange the temporary token for a permanent access token using the following request:</p>
+
+<pre class="prettyprint linenums">POST https://SHOP_NAME.myshopify.com/admin/oauth/access_token</pre>
+
+<p>with the following parameters:</p>
+
+<table class="table table-striped table-bordered">
+  <tr>
+    <td><code>client_id</code></td>
+    <td>Required</td>
+    <td>The API key for your app</td>
+  </tr>
+  <tr>
+    <td><code>client_secret</code></td>
+    <td>Required</td>
+    <td>The shared secret for your app</td>
+  </tr>
+  <tr>
+    <td><code>code</code></td>
+    <td>Required</td>
+    <td>The token you received in step 1</td>
+  </li>
+</table>
+
+<p>The response will contain your access token.</p>
+
+<h2>Step 3</h2>
+
+<p>Use the token to access the API. To do this, set a <code>X-Shopify-Access-Token</code> header on all your requests that contains the access token. The token is good for the lifetime of the install, so save it somewhere secure for use later on. You can also append the token as a URL parameter, but the header version is preferred.</p>
+
+<h2 id="scopes">Scopes</h2>
+
+<p>Through OAuth2 you can request various access scopes for your app. For example, an app that only deals with orders can just request the order scope and not gain access to extra info like products, themes, or blogs. The scopes are listed below followed by the endpoints they give access to. Note that write permission implies reading, so you don't need to request both.</p>
+
+
+<div class="row">
+  <div class="span3">
+    <div class="well">
+      <h3>(read|write)_content</h3>
+      <ul>
+        <li><a href="article.html">Article</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="comment.html">Comment</a></li>
+        <li><a href="page.html">Page</a></li>
+        <li><a href="redirect.html">Redirect</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="span3"> 
+    <div class="well">
+      <h3>(read|write)_themes</h3>
+  
+      <ul>
+        <li><a href="asset.html">Asset</a></li>
+        <li><a href="theme.html">Theme</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="span3">
+    <div class="well">
+      <h3>(read|write)_products</h3>
+    
+      <ul>
+        <li><a href="product.html">Product</a></li>
+        <li><a href="product_variant.html">Product Variant</a></li>
+        <li><a href="product_image.html">Product Image</a></li>
+        <li><a href="collect.html">Collect</a></li>
+        <li><a href="customcollection.html">Custom Collection</a></li>
+        <li><a href="smartcollection.html">Smart Collection</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+
+  <div class="span3"> 
+    <div class="well">
+      <h3>(read|write)_customers</h3>
+       
+      <ul>
+        <li><a href="customer.html">Customer</a></li>
+        <li><a href="customergroup.html">Customer Group</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="span3">  
+    <div class="well">
+      <h3>(read|write)_orders</h3>
+
+      <ul>
+        <li><a href="order.html">Order</a></li>
+        <li><a href="transactions.html">Transaction</a></li>
+        <li><a href="fulfillment.html">Fulfillment</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="span3">
+    <div class="well">
+      <h3>(read|write)script_tags</h3>
+    
+      <ul>
+        <li><a href="scripttag.html">ScriptTag</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="row">
+
+  <div class="span3">  
+    <div class="well">
+      <h3>(read|write)_shipping</h3>
+    
+      <ul>
+        <li>Shipping (Coming Soon)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="span3">
+    <div class="well">
+      <h3>All apps get access to the following resources by default:</h3>
+    
+      <ul>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="country.html">Country</a></li>
+        <li><a href="event.html">Event</a></li>
+        <li><a href="productsearchengine.html">ProductSearchEngine</a></li>
+        <li><a href="province.html">Province</a></li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<h3>Other Scopes</h3>
+
+<p>Some scopes are implied. Both <a href='metafield.html'>Metafields</a> and <a href='webhook.html'>Webhooks</a> rely on other objects, so permissions for these are granted alongside the resources they operate on. This means that if you request the Order scope, you&#8217;ll get access to order webhooks and be able to read/write metafields on orders.</p>
+
+<h2>Examples</h2>
+
+<h3>Requesting access to a shop with write access to products and read access to orders:</h3>
+
+<pre class="prettyprint linenums">https://SHOP_NAME.myshopify.com/admin/oauth/authorize?client_id=API_KEY&amp;scope=write_products,read_orders</pre>
+
+<h3>Requesting access to a shop with no additional permissions beyond the basics:</h3>
+
+<pre class="prettyprint linenums">https://SHOP_NAME.myshopify.com/admin/oauth/authorize?client_id=API_KEY</pre>
+
+<h3>Requesting access to a shop with product write permissions and a custom redirect URL:</h3>
+
+<p>Notice that the URL is encoded:</p>
+
+<pre class="prettyprint linenums">https://SHOP_NAME.myshopify.com/admin/oauth/authorize?client_id=API_KEY&amp;scope=write_products&amp;redirect_url=http%3A%2F%2Fshopify.com%2Fapp%2Flogin</pre>
+
+<h2>App Store Installs</h2>
+
+<p>If your app is installed from the <a href="http://apps.shopify.com">Shopify App Store</a> then the merchant will be redirected to your default app URL as defined in the Partners dashboard. You will then have to start the auth process as described above.</p>
+  
+<p>To help you get started the shop URL will be appended as a parameter on this request. We also sign these requests in a similar fashion to our webhooks, <a href="http://wiki.shopify.com/Verifying_Webhooks">see here for more details on this</a>.</p>
+
+<p>Given the redirect URL</p>
+  
+<pre class="prettyprint linenums">http://shopify.com/app</pre>
+
+<p>merchants coming from the App Store will look like this:</p>
+
+<pre class="prettyprint linenums">GET http://shopify.com/app?shop=SHOP_URL</pre>
