@@ -1,0 +1,91 @@
+---
+layout: resource
+title: Product Search Engine
+intro: 
+---
+<div class='row-fluid'>
+  <div class='span12'>
+
+    <h2>What can you do with product search engines using the Shopify API?</h2>
+
+    <p>The Shopify API lets you do the following with product search engines:</p>
+    <ul>
+      <li><strong>Get information</strong> about the shop's product search engines</li>
+    </ul>
+    
+    <h2>Product search engine properties</h2>
+    <table class='table table-striped table-bordered'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><tt>created_at</tt></strong></td>
+          <td>The date and time when the product search engine was created. The API returns this value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format.</a></td>
+        </tr>
+        <tr>
+          <td><strong><tt>name</tt></strong></td>
+          <td>The name of the product search engine.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Endpoints</h2>
+    <script type="text/javascript">$(".collapse").collapse()</script>
+    <div class="accordion" id="accordion1">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseOne'>
+              <tt>GET /admin/product_search_engines.json</tt>
+          </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <h3>Query parameters</h3>
+            <p>By default, requesting a list of product search engines returns all the product search engines for that shop. You can use the optional query parameters listed below to filter the returned list by specific criteria.</p>
+
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><tt>fields</tt></strong></td>
+                  <td>A comma-separated list of the properties you want returned for each product search engine in the result list. By default, the returned list of product search engines is a list of product search engines with all the properties included. Use this parameter to restrict the returned list of product search engines to showing only those properties you specify, with each property name separated by a comma.</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <h3>Example: Get a list of the shop's product search engines</h3>
+            
+            <h4>Request:</h4>
+            <pre class="prettyprint linenums">GET admin/shops/241253187/product search engines.json</pre>
+            
+            <h4>Response:</h4>
+            <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "product_search_engines": [
+    {
+      "created_at": "2012-05-01T14:22:26-04:00",
+      "name": "Google Product Search"
+    }
+  ]
+}
+            </pre>
+            
+            </div>
+          </div>
+        </div>
+        
+
+      </div>
+    </div>
+  </div>
+</div>
