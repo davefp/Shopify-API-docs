@@ -1,0 +1,278 @@
+---
+layout: resource
+title: Product Image
+intro: Products are easier to sell if customers can see pictures of them, which is why there are '''product images'''. Any product can have one or more images, and images can be in .png, .gif or .jpg format.
+---
+<div class='row-fluid'>
+  <div class='span12'>
+    <h2>What can you do with product images using the Shopify API?</h2>
+
+    <p>The Shopify API lets you do the following with product images:</p>
+    <ul>
+      <li><strong>Get information</strong> about one or more product images.</li>
+      <li><strong>Add an image</strong> to a product.</li>
+      <li><strong>Delete</strong> a product image.</li>
+    </ul>
+    <p>Just about anything that can be done with an product image through the shop's admin page can also be done through the API.</p>
+    
+    <h2>Product image properties</h2>
+    <table class='table table-striped table-bordered'>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong><tt>created_at</tt></strong></td>
+          <td>The date and time when the product image was created. The API returns this value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format.</a></td>
+        </tr>
+        <tr>
+          <td><strong><tt>id</tt></strong></td>
+          <td>A unique numeric identifier for the product image.</td>
+        </tr>        
+        <tr>
+          <td><strong><tt>position</tt></strong></td>
+          <td>The order of the image in the list. The first image is at position 1 and is the "main" image for the product.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>product-id</tt></strong></td>
+          <td>The <tt>id</tt> of the product associated with the image.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>src</tt></strong></td>
+          <td>The URL of the image.</td>
+        </tr>
+        <tr>
+          <td><strong><tt>updated_at</tt></strong></td>
+          <td>The date and time when the product image was last modified. The API returns this value in <a href='http://en.wikipedia.org/wiki/ISO_8601'>ISO 8601 format.</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Endpoints</h2>
+    <script type="text/javascript">$(".collapse").collapse()</script>
+    <div class="accordion" id="accordion1">
+      <div class="accordion-group">
+        <div class="accordion-heading">
+          <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseOne'>
+              <tt>GET /admin/products/:product_id/images</tt>
+          </a>
+        </div>
+        <div id="collapseOne" class="accordion-body collapse">
+          <div class="accordion-inner">
+            <h3>Query parameters</h3>
+            <p>By default, requesting a list of product images returns all the product images for that shop. You can use the optional query parameters listed below to filter the returned list by specific criteria.</p>
+
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong><tt>fields</tt></strong></td>
+                  <td>A comma-separated list of the properties you want returned for each product image in the result list. By default, the returned list of product images is a list of product images with all the properties included. Use this parameter to restrict the returned list of product images to showing only those properties you specify, with each property name separated by a comma.</td>
+                </tr>
+                <tr>
+                  <td><strong><tt>since_id</tt></strong></td>
+                  <td>The lower bound on a product image’s id. Use this parameter to restrict the returned list to only product images whose id is greater than the specified id.</td>
+                </tr>
+              </tbody>
+            </table>
+            
+            <h3>Example: Get the complete list of product images for a product</h3>
+            <p>In this example, we want to retrieve the complete list of images for the product whose <tt>id</tt> is <tt>632910392</tt>.</p>
+            
+            <h4>Request:</h4>
+            <pre class="prettyprint linenums">GET /admin/products/632910392/images.json</pre>
+            
+            <h4>Response:</h4>
+            <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "images": [
+    {
+      "created_at": "2012-03-13T16:09:58-04:00",
+      "id": 850703190,
+      "position": 1,
+      "product_id": 632910392,
+      "updated_at": "2012-03-13T16:09:58-04:00",
+      "src": "http://static.shopify.com/s/files/1/6909/3384/products/ipod-nano.png?0"
+    }
+  ]
+}
+            </pre>
+            
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseTwo'>
+              <tt>GET /admin/products/:product_id/images/:product_image_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseTwo" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Get a single product image</h3>
+              <p>In this example, we want to retrieve an image for the product whose <tt>id</tt> is <tt>632910392</tt>; the product image <tt>id</tt> is <tt>850703190</tt>.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET /admin/products/632910392/images/850703190.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{
+  "image": {
+    "created_at": "2012-03-13T16:09:58-04:00",
+    "id": 850703190,
+    "position": 1,
+    "product_id": 632910392,
+    "updated_at": "2012-03-13T16:09:58-04:00",
+    "src": "http://static.shopify.com/s/files/1/6909/3384/products/ipod-nano.png?0"
+  }
+}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseThree'>
+              <tt>POST /admin/products/:product_id/images.json</tt>
+            </a>
+          </div>
+          <div id="collapseThree" class="accordion-body collapse">
+            <div class="accordion-inner">
+              
+              <h3>Example: Add an image </h3>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">GET admin/shops/241253187/product images.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFour'>
+              <tt>POST /admin/product image.json</tt>
+            </a>
+          </div>
+          <div id="collapseFour" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Add a base64-encoded image to a product</h3>
+              <p>If you have an image in memory or local storage (e.g. your hard drive), you can upload it to Shopify by converting it into a string using <a href="http://en.wikipedia.org/wiki/Base64">base64 encoding</a> and including it as an <tt>attachment</tt> property in the request body.</p>
+              <p>When you upload an image, you need to provide it with a filename.</p>
+              <p>To make a product image the primary one, set its <tt>position</tt> property to <tt>1</tt>.</p>
+              <p>In this example:</p>
+              <ul>
+                <li>We'll add a new product image to a product as a string created using base64 encoding. Since these strings are very long, we will use the string <tt>=== BASE64-ENCODED IMAGE ===</tt> to represent the image data.</li>
+                <li>The <tt>id</tt> of the product is <tt>632910392</tt>.</li>
+                <li>We'll assign the filename <tt>rails_logo.gif</tt> to the product image.</li>
+              </ul>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/products/:product_id/images.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "image": {
+    "position": 1,
+    "attachment": "=== BASE64-ENCODED IMAGE ==="
+    "filename": "rails_logo.gif"
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "image": {
+    "created_at": "2012-03-13T16:10:43-04:00",
+    "id": 916933559,
+    "position": 1,
+    "product_id": 632910392,
+    "updated_at": "2012-03-13T16:10:43-04:00",
+    "src": "http://static.shopify.com/s/files/1/6909/3384/products/rails_logo.gif?1"
+  }
+}
+              </pre>
+
+              <h3>Example: Add an image from an URL to a product</h3>
+              <p>In this example, we'll instruct Shopify to create its own copy of the image stored at <tt><nowiki>http://example.com/rails_logo.gif</nowiki></tt> and add it as a product image for the product whose <tt>id</tt> is <tt>632910392</tt>.</p>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">POST /admin/products/632910392/images.json</pre>
+
+              <h4>Request body:</h4>
+              <pre class="prettyprint linenums">
+{
+  "image": {
+    "src": "http://example.com/rails_logo.gif"
+  }
+}
+              </pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 201 Created[]
+{
+  "image": {
+    "created_at": "2012-03-13T16:10:43-04:00",
+    "id": 916933559,
+    "position": 1,
+    "product_id": 632910392,
+    "updated_at": "2012-03-13T16:10:43-04:00",
+    "src": "http://static.shopify.com/s/files/1/6909/3384/products/rails_logo.gif?1"
+  }
+}
+              </pre>
+
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class='accordion-toggle' data-toggle='collapse' data-parent='#accordion1' href='#collapseFive'>
+              <tt>DELETE /admin/products/:product_id/images/:product_image_id.json</tt>
+            </a>
+          </div>
+          <div id="collapseFive" class="accordion-body collapse">
+            <div class="accordion-inner">
+              <h3>Example: Delete a product image</h3>
+
+              <h4>Request:</h4>
+              <pre class="prettyprint linenums">DELETE /admin/products/632910392/images/916933562.json</pre>
+
+              <h4>Response:</h4>
+              <pre class="prettyprint linenums">
+HTTP/1.1 200 OK[]
+{}
+              </pre>
+              
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
