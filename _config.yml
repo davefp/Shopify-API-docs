@@ -43,70 +43,70 @@ kramdown:
 navigation:
 - header: Big Stuff
 - text: Authentication
-  url: /authentication.html
+  url: authentication.html
 - text: Application Proxy
-  url: /application_proxy.html
+  url: application_proxy.html
 - text: Cart Manipulation
-  url: /cart_manipulation.html
+  url: cart_manipulation.html
 - header: Billing
 - text: Overview
-  url: /billing_overview.html
+  url: billing_overview.html
 - text: Application Charges
-  url: /application_charges.html
+  url: application_charges.html
 - text: Recurring Application Charges
-  url: /recurring_application_charges.html
+  url: recurring_application_charges.html
 - header: API Reference
 - text: Article
-  url: /article.html
+  url: article.html
 - text: Asset
-  url: /asset.html
+  url: asset.html
 - text: Blog
-  url: /blog/html
+  url: blog/html
 - text: Cart
-  url: /cart.html
+  url: cart.html
 - text: Collect
-  url: /collect.html
+  url: collect.html
 - text: Comment
-  url: /comment.html
+  url: comment.html
 - text: Country
-  url: /country.html
+  url: country.html
 - text: Custom Collection
-  url: /custom_collection.html
+  url: custom_collection.html
 - text: Customer
-  url: /customer.html
+  url: customer.html
 - text: Customer Group
-  url: /customer_group.html
+  url: customer_group.html
 - text: Event
-  url: /event.html
+  url: event.html
 - text: Fulfillment
-  url: /fulfillment.html
+  url: fulfillment.html
 - text: Metafield
-  url: /metafield.html
+  url: metafield.html
 - text: Order
-  url: /order.html
+  url: order.html
 - text: Page
-  url: /page.html
+  url: page.html
 - text: Product
-  url: /product.html
+  url: product.html
 - text: Product Image
-  url: /product_image.html
+  url: product_image.html
 - text: Product Variant
-  url: /product_variant.html
+  url: product_variant.html
 - text: Product Search Engine
-  url: /product_search_engine.html
+  url: product_search_engine.html
 - text: Province
-  url: /provice.html
+  url: provice.html
 - text: Redirect
-  url: /redirect.html
+  url: redirect.html
 - text: Script Tag
-  url: /script_tag.html
+  url: script_tag.html
 - text: Shop
-  url: /shop.html
+  url: shop.html
 - text: Smart Collection
-  url: /smart_collection.html
+  url: smart_collection.html
 - text: Theme
-  url: /theme.html
+  url: theme.html
 - text: Transactions
-  url: /transactions.html
+  url: transactions.html
 - text: Webhook
-  url: /webhook.html
+  url: webhook.html
